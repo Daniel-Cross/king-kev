@@ -1,20 +1,40 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import Routes from "./navigation/Routes";
+import { useCallback, useEffect, useState } from "react";
+import * as SplashScreen from "expo-splash-screen";
+import { useFonts } from "./hooks/fonts";
 
 export default function App() {
+  const [isReady, setIsReady] = useState(false);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (isReady) {
+      await SplashScreen.hideAsync();
+    }
+  }, [isReady]);
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        // Pre-load fonts, make any API calls you need to do here
+        await useFonts();
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setIsReady(true);
+        onLayoutRootView();
+      }
+    }
+    prepare();
+  }, []);
+
+  if (!isReady) {
+    return null;
+  }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+      <StatusBar style="auto" animated={true} />
+      <Routes />
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
