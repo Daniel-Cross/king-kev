@@ -1,46 +1,73 @@
 import { LinearGradient } from "expo-linear-gradient";
 import {
   Animated,
-  Dimensions,
   SafeAreaView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { LOGO_FONT } from "../constants/typography";
 import { KEGGY } from "../constants/quotes";
-import { useRef } from "react";
-
-const width = Dimensions.get("window").width;
+import { useEffect, useRef } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { width } from "../constants/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { updateFavourites } from "../redux/favouriteDataSlice";
+import { Audio } from "expo-av";
+import { useIsFocused } from "@react-navigation/native";
+import * as Sharing from "expo-sharing";
+import { captureRef } from "react-native-view-shot";
 
 const Home = () => {
+  const imageRef = useRef();
+  const dispatch = useDispatch();
+  const { favourites } = useSelector((state: RootState) => state.favourites);
   const scrollX = useRef(new Animated.Value(0)).current;
+  const focused = useIsFocused();
+  const soundObject = useRef(new Audio.Sound()).current;
 
-  const Indicator = ({ scrollX }: { scrollX: Animated.Value }) => {
-    return (
-      <View style={styles.indicatorContainer}>
-        {KEGGY.map((_: any, i: number) => {
-          const inputRange = [(i - 1) * width, i * width, (i + 1) * width];
+  useEffect(() => {
+    if (!focused) {
+      soundObject.unloadAsync();
+    }
+  }, [focused]);
 
-          const scale = scrollX.interpolate({
-            inputRange,
-            outputRange: [0.8, 1.4, 0.8],
-            extrapolate: "clamp",
-          });
+  const handleAddToFavourites = async (quote: string) => {
+    dispatch(updateFavourites(quote));
 
-          return (
-            <Animated.View
-              key={i}
-              style={[styles.indicator, { transform: [{ scale }] }]}
-            />
-          );
-        })}
-      </View>
-    );
+    try {
+      await soundObject.unloadAsync();
+    } catch (error) {
+      console.error("Error unloading previous sound:", error);
+    }
+
+    if (!favourites.includes(quote)) {
+      try {
+        await soundObject.loadAsync(require("../assets/sounds/loveIt.mp3"));
+        await soundObject.playAsync();
+      } catch (error) {
+        console.error("Error playing loveIt.mp3:", error);
+      }
+    } else {
+      try {
+        await soundObject.loadAsync(require("../assets/sounds/ifOnly.mp3"));
+        await soundObject.playAsync();
+      } catch (error) {
+        console.error("Error playing ifOnly.mp3:", error);
+      }
+    }
   };
 
+  const handleShare = async (quote: string) => {};
+
   return (
-    <LinearGradient colors={["#FB5FA1", "#F4AA60"]} style={styles.container}>
+    <LinearGradient
+      colors={["#FB5FA1", "#F4AA60"]}
+      style={styles.container}
+      ref={() => imageRef}
+    >
       <SafeAreaView>
         <Animated.FlatList
           onScroll={Animated.event(
@@ -56,11 +83,33 @@ const Home = () => {
             return (
               <View style={styles.quoteContainer}>
                 <Text style={styles.logo}>{item}</Text>
+                <View style={styles.shareButtons}>
+                  {favourites.includes(item) ? (
+                    <TouchableOpacity
+                      onPress={() => handleAddToFavourites(item)}
+                    >
+                      <Ionicons name="ios-heart" size={30} color="#fb3958" />
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={() => handleAddToFavourites(item)}
+                    >
+                      <Ionicons name="heart-outline" size={30} color="white" />
+                    </TouchableOpacity>
+                  )}
+
+                  <TouchableOpacity onPress={() => handleShare(item)}>
+                    <Ionicons
+                      name="ios-share-outline"
+                      size={30}
+                      color="white"
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
             );
           }}
         />
-        <Indicator scrollX={scrollX} />
       </SafeAreaView>
     </LinearGradient>
   );
@@ -82,25 +131,18 @@ const styles = StyleSheet.create({
     top: 3,
     left: 47,
   },
-  indicatorContainer: {
-    position: "absolute",
-    bottom: 100,
-    flexDirection: "row",
-    width,
-    flexWrap: "wrap",
-  },
-  indicator: {
-    height: 5,
-    width: 5,
-    borderRadius: 5,
-    backgroundColor: "#fff",
-    margin: 10,
-  },
+
   quoteContainer: {
     height: "100%",
     width,
     justifyContent: "center",
     alignItems: "center",
+  },
+  shareButtons: {
+    marginTop: 30,
+    justifyContent: "space-between",
+    width: 150,
+    flexDirection: "row",
   },
 });
 

@@ -3,6 +3,8 @@ import Routes from "./navigation/Routes";
 import { useCallback, useEffect, useState } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "./hooks/fonts";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
@@ -32,9 +34,9 @@ export default function App() {
     return null;
   }
   return (
-    <>
+    <Provider store={store}>
       <StatusBar style="auto" animated={true} />
       <Routes />
-    </>
+    </Provider>
   );
 }
