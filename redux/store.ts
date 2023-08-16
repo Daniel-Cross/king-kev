@@ -6,7 +6,7 @@ export const store = configureStore({
     favourites: favouritesReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }),
+    getDefaultMiddleware({ serializableCheck: false }).concat(), // No need to explicitly include thunk
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

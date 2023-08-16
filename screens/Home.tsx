@@ -9,24 +9,29 @@ import {
 } from "react-native";
 import { LOGO_FONT } from "../constants/typography";
 import { KEGGY } from "../constants/quotes";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { width } from "../constants/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { updateFavourites } from "../redux/favouriteDataSlice";
+import { loadFavourites, updateFavourites } from "../redux/favouriteDataSlice";
 import { Audio } from "expo-av";
 import { useIsFocused } from "@react-navigation/native";
 import * as Sharing from "expo-sharing";
 import { captureRef } from "react-native-view-shot";
 
 const Home = () => {
-  const imageRef = useRef();
+  const [hideIcons, setHideIcons] = useState(false);
+  const viewRef = useRef();
   const dispatch = useDispatch();
   const { favourites } = useSelector((state: RootState) => state.favourites);
   const scrollX = useRef(new Animated.Value(0)).current;
   const focused = useIsFocused();
   const soundObject = useRef(new Audio.Sound()).current;
+
+  useEffect(() => {
+    dispatch(loadFavourites());
+  }, []);
 
   useEffect(() => {
     if (!focused) {
@@ -60,13 +65,37 @@ const Home = () => {
     }
   };
 
-  const handleShare = async (quote: string) => {};
+  const handleShare = async () => {
+    try {
+      setHideIcons(true);
+      setTimeout(async () => {
+        // Capture the screenshot as a URI
+        const uri = await captureRef(viewRef, {
+          format: "png",
+          quality: 0.8,
+        });
+
+        // Check if sharing is available
+        if (!(await Sharing.isAvailableAsync())) {
+          alert(`Uh oh, sharing isn't available on your platform`);
+          return;
+        }
+
+        // Share the captured image
+        await Sharing.shareAsync(uri);
+        setHideIcons(false);
+      }, 100);
+    } catch (error) {
+      console.error("Error sharing image:", error);
+      setHideIcons(false);
+    }
+  };
 
   return (
     <LinearGradient
       colors={["#FB5FA1", "#F4AA60"]}
       style={styles.container}
-      ref={() => imageRef}
+      ref={viewRef}
     >
       <SafeAreaView>
         <Animated.FlatList
@@ -84,27 +113,39 @@ const Home = () => {
               <View style={styles.quoteContainer}>
                 <Text style={styles.logo}>{item}</Text>
                 <View style={styles.shareButtons}>
-                  {favourites.includes(item) ? (
-                    <TouchableOpacity
-                      onPress={() => handleAddToFavourites(item)}
-                    >
-                      <Ionicons name="ios-heart" size={30} color="#fb3958" />
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-                      onPress={() => handleAddToFavourites(item)}
-                    >
-                      <Ionicons name="heart-outline" size={30} color="white" />
-                    </TouchableOpacity>
-                  )}
+                  {!hideIcons && (
+                    <>
+                      {favourites.includes(item) ? (
+                        <TouchableOpacity
+                          onPress={() => handleAddToFavourites(item)}
+                        >
+                          <Ionicons
+                            name="ios-heart"
+                            size={30}
+                            color="#fb3958"
+                          />
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          onPress={() => handleAddToFavourites(item)}
+                        >
+                          <Ionicons
+                            name="heart-outline"
+                            size={30}
+                            color="white"
+                          />
+                        </TouchableOpacity>
+                      )}
 
-                  <TouchableOpacity onPress={() => handleShare(item)}>
-                    <Ionicons
-                      name="ios-share-outline"
-                      size={30}
-                      color="white"
-                    />
-                  </TouchableOpacity>
+                      <TouchableOpacity onPress={() => handleShare()}>
+                        <Ionicons
+                          name="ios-share-outline"
+                          size={30}
+                          color="white"
+                        />
+                      </TouchableOpacity>
+                    </>
+                  )}
                 </View>
               </View>
             );

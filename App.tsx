@@ -5,6 +5,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "./hooks/fonts";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
+import { loadFavourites } from "./redux/favouriteDataSlice";
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
