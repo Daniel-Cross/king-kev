@@ -8,7 +8,6 @@ import {
   View,
 } from "react-native";
 import { LOGO_FONT } from "../constants/typography";
-import { KEGGY } from "../constants/quotes";
 import { useEffect, useRef, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { width } from "../constants/constants";
@@ -19,9 +18,9 @@ import { Audio } from "expo-av";
 import { useIsFocused } from "@react-navigation/native";
 import * as Sharing from "expo-sharing";
 import { captureRef } from "react-native-view-shot";
-import YoutubePlayer from "react-native-youtube-iframe";
+import EmptyState from "../components/atoms/EmptyState";
 
-const Home = () => {
+const Favorites = () => {
   const [hideIcons, setHideIcons] = useState(false);
   const viewRef = useRef();
   const dispatch = useDispatch();
@@ -99,65 +98,63 @@ const Home = () => {
       ref={viewRef}
     >
       <SafeAreaView>
-        <Animated.FlatList
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-            { useNativeDriver: true }
-          )}
-          data={KEGGY}
-          keyExtractor={(item) => item}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-          renderItem={({ item }) => {
-            return (
-              <View style={styles.quoteContainer}>
-                {/* <Text style={styles.text}>{item}</Text> */}
-                {/* <YoutubePlayer
-                  height={240}
-                  width={380}
-                  play={true}
-                  videoId={"2BWAL7ADsi0"}
-                /> */}
-                <View style={styles.shareButtons}>
-                  {!hideIcons && (
-                    <>
-                      {favourites.includes(item) ? (
-                        <TouchableOpacity
-                          onPress={() => handleAddToFavourites(item)}
-                        >
+        {favourites.length > 0 ? (
+          <Animated.FlatList
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+              { useNativeDriver: true }
+            )}
+            data={favourites}
+            keyExtractor={(item) => item}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            pagingEnabled
+            renderItem={({ item }) => {
+              return (
+                <View style={styles.quoteContainer}>
+                  <Text style={styles.text}>{item}</Text>
+                  <View style={styles.shareButtons}>
+                    {!hideIcons && (
+                      <>
+                        {favourites.includes(item) ? (
+                          <TouchableOpacity
+                            onPress={() => handleAddToFavourites(item)}
+                          >
+                            <Ionicons
+                              name="ios-heart"
+                              size={30}
+                              color="#fb3958"
+                            />
+                          </TouchableOpacity>
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => handleAddToFavourites(item)}
+                          >
+                            <Ionicons
+                              name="heart-outline"
+                              size={30}
+                              color="white"
+                            />
+                          </TouchableOpacity>
+                        )}
+
+                        <TouchableOpacity onPress={() => handleShare()}>
                           <Ionicons
-                            name="ios-heart"
-                            size={30}
-                            color="#fb3958"
-                          />
-                        </TouchableOpacity>
-                      ) : (
-                        <TouchableOpacity
-                          onPress={() => handleAddToFavourites(item)}
-                        >
-                          <Ionicons
-                            name="heart-outline"
+                            name="ios-share-outline"
                             size={30}
                             color="white"
                           />
                         </TouchableOpacity>
-                      )}
-
-                      <TouchableOpacity onPress={() => handleShare()}>
-                        <Ionicons
-                          name="ios-share-outline"
-                          size={30}
-                          color="white"
-                        />
-                      </TouchableOpacity>
-                    </>
-                  )}
+                      </>
+                    )}
+                  </View>
                 </View>
-              </View>
-            );
-          }}
-        />
+              );
+            }}
+          />
+        ) : (
+          <EmptyState />
+        )}
       </SafeAreaView>
     </LinearGradient>
   );
@@ -188,4 +185,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default Favorites;

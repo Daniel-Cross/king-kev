@@ -4,9 +4,11 @@ import { IS_IOS, ROUTE } from "../constants/constants";
 import { PRIMARY } from "../constants/colours";
 import Home from "../screens/Home";
 import Game from "../screens/Game";
+import Favourites from "../screens/Favourites";
 
 type TabParamList = {
   HOME: undefined;
+  FAVOURITES: undefined;
   GAME: undefined;
 };
 
@@ -34,6 +36,9 @@ const TabNavigation = () => {
           if (route.name === ROUTE.HOME) {
             iconName = "home-outline";
           }
+          if (route.name === ROUTE.FAVOURITES) {
+            iconName = "ios-heart-outline";
+          }
           if (route.name === ROUTE.GAME) {
             iconName = "game-controller-outline";
           }
@@ -44,6 +49,11 @@ const TabNavigation = () => {
       <Tab.Screen
         name="HOME"
         component={Home}
+        options={{ tabBarShowLabel: false }}
+      />
+      <Tab.Screen
+        name="FAVOURITES"
+        component={Favourites}
         options={{ tabBarShowLabel: false }}
       />
       <Tab.Screen

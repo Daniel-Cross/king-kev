@@ -1,7 +1,6 @@
 export const SHRIKHAND = "SHRIKHAND";
-// export const NUNITO_ITALIC = "NUNITO_ITALIC";
-// export const NUNITO_SEMI_BOLD = "NUNITO_SEMI_BOLD";
-// export const NUNITO_BOLD = "NUNITO_BOLD";
+export const PROX_MEDIUM = "PROX_MEDIUM";
+export const PROX_BOLD = "PROX_BOLD";
 
 const FONT_SIZE_50 = 50;
 const FONT_SIZE_30 = 30;
@@ -29,7 +28,14 @@ export const LOGO_FONT = {
 //   fontFamily: NUNITO_SEMI_BOLD,
 // };
 
-// export const BODY_FONT_BOLD = {
-//   fontSize: FONT_SIZE_16,
-//   fontFamily: NUNITO_SEMI_BOLD,
-// };
+export const BODY_FONT_BOLD = {
+  fontSize: FONT_SIZE_20,
+  fontFamily: PROX_BOLD,
+  color: "#fff",
+};
+
+export const BODY_FONT = {
+  fontSize: FONT_SIZE_20,
+  fontFamily: PROX_MEDIUM,
+  color: "#fff",
+};

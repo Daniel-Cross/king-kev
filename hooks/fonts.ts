@@ -10,7 +10,6 @@ import * as Font from "expo-font";
 export const useFonts = async () =>
   await Font.loadAsync({
     SHRIKHAND: require("../assets/fonts/Shrikhand-Regular.ttf"),
-    // NUNITO_ITALIC: require("../../assets/fonts/Nunito-Italic.ttf"),
-    // NUNITO_SEMI_BOLD: require("../../assets/fonts/Nunito-SemiBold.ttf"),
-    // NUNITO_BOLD: require("../../assets/fonts/Nunito-Bold.ttf"),
+    PROX_MEDIUM: require("../assets/fonts/proximanova_medium.otf"),
+    PROX_BOLD: require("../assets/fonts/proximanova_semibold.otf"),
   });

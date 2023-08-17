@@ -1,138 +1,260 @@
 export const KEGGY = [
-  `“They’re the second best team in the world, and there's no higher praise than that.”`,
-
-  `“The Germans only have one player under 22, and he's 23.”`,
-
-  `“You can’t play with a one armed goalkeeper… not at this level.”`,
-
-  `“The good news for Nigeria is that they're two-nil down very early in the game.”`,
-
-  `“He’ll also be very dangerous from set-pieces. That means he'll be a threat from free-kicks and corners in the final third of the field.”`,
-
-  `"One of his strengths is not heading.”`,
-
-  `“We are three games without defeat is another way of looking at it. But if we are honest we have taken two points from nine.”`,
-
-  `“I’ll never play at Wembley again, unless I play at Wembley again.”`,
-
-  `“I know what is around the corner – I just don’t know where the corner is.”`,
-
-  `“Not many teams will come to Arsenal and get anything, home or away.”`,
-
-  `“We deserved to win this game after hammering them 0-0 in the first half.”`,
-
-  `“Argentina won't be at Euro 2000 because they're from South America.”`,
-
-  `“Football’s always easier when you've got the ball.”`,
-
-  `“They compare Steve McManaman to Steve Heighway and he's nothing like him, but I can see why - it's because he's a bit different.”`,
-
-  `“We managed to wrong a few rights.”`,
-
-  `“That decision, for me, was almost certainly definitely wrong.”`,
-
-  `“Shaun Wright-Phillips has got a big heart. It's as big as him, which isn't very big, but it's bigger.”`,
-
-  `“The tide is very much in our court now.”`,
-
-  `“I came to Nantes two years ago and it's much the same today, except that it's totally different.”`,
-
-  `“I’m not disappointed - just disappointed.”`,
-
-  `“Life wouldn’t be worth living if you could buy confidence because the rich people would have it all and everybody else would… would have to make their own arrangements.”`,
-
-  `”He scores most of his goals when he's got the ball."`,
-
-  `“Gary always weighed up his options, especially when he had no choice.”`,
-
-  `“I’d love to be a mole on the wall in the dressing room.”`,
-
-  `“Chile have three options – they could win or they could lose.”`,
-
-  `”That would have been a goal if it wasn't saved.”`,
-
-  `“I want more from David Beckham. I want him to improve on perfection.”`,
-
-  `“In some ways, cramp is worse than having a broken leg.”`,
-
-  `“He can't speak Turkey, but you can tell he's delighted.”`,
-
-  `“Despite his white boots, he has real pace…"`,
-
-  `“There’s a slight doubt about only one player, and that's Tony Adams, who definitely won't be playing tomorrow.”`,
-
-  `“The ref was vertically 15 yards away.”`,
-
-  `“It could be far worse for me if it was easy for me.”`,
-
-  `“The substitute is about to come on - he's a player who was left out of the starting line-up today.”`,
-
-  `“You get bunches of players like you do bananas, though that is a bad comparison.”`,
-
-  `“Luis Figo is totally different to David Beckham, and vice versa.”`,
-
-  `“You’re not just getting international football, you're getting world football.”`,
-
-  `“Nicolas Anelka left Arsenal for £23million and they built a training ground on him.”`,
-
-  `“Goalkeepers aren't born today until they're in their late twenties or thirties.”`,
-
-  `“England can end the millennium as it started – as the greatest football nation in the world.”`,
-
-  `“I’ve had an interest in racing all my life, or longer really.”`,
-
-  `“I don't think there's anyone bigger or smaller than Maradona.”`,
-
-  `“It’s understandable that people are keeping one eye on the pot and another up the chimney.”`,
-
-  `“England have the best fans in the world and Scotland's fans are second-to-none.”`,
-
-  `“He’s using his strength. And that is his strength – his strength.”`,
-
-  `“There’ll be no siestas in Madrid tonight.”`,
-
-  `“The 33 or 34-year-olds will be 36 or 37 by the time the next World Cup comes around, if they're not careful.”`,
-
-  `“You can't do better than go away from home and get a draw…”`,
-
-  // <iframe
-  //   width="560"
-  //   height="315"
-  //   src="https://www.youtube.com/embed/3MnMskejuvc"
-  //   frameborder="0"
-  //   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-  //   allowfullscreen
-  // />,
-
-  // <iframe
-  //   width="560"
-  //   height="315"
-  //   src="https://www.youtube.com/embed/UlS3ppI_KL0?start=6"
-  //   frameborder="0"
-  //   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-  //   allowfullscreen
-  // />,
-
-  // <iframe
-  //   width="560"
-  //   height="315"
-  //   src="https://www.youtube.com/embed/uDe8EsBBfm0?start=14"
-  //   frameborder="0"
-  //   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-  //   allowfullscreen
-  // />,
-
-  // <iframe
-  //   width="560"
-  //   height="315"
-  //   src="https://www.youtube.com/embed/2BWAL7ADsi0"
-  //   frameborder="0"
-  //   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-  //   allowfullscreen
-  // />,
-
-  // <TwitterTweetEmbed tweetId={'1097986907873644544'} />,
+  {
+    id: 1,
+    type: "quote",
+    quote: `“They’re the second best team in the world, and there's no higher praise than that.”`,
+  },
+  {
+    id: 2,
+    type: "quote",
+    quote: `“The Germans only have one player under 22, and he's 23.”`,
+  },
+  {
+    id: 3,
+    type: "quote",
+    quote: `“You can’t play with a one-armed goalkeeper… not at this level.”`,
+  },
+  {
+    id: 4,
+    type: "quote",
+    quote: `“The good news for Nigeria is that they're two-nil down very early in the game.”`,
+  },
+  {
+    id: 5,
+    type: "quote",
+    quote: `“He’ll also be very dangerous from set-pieces. That means he'll be a threat from free-kicks and corners in the final third of the field.”`,
+  },
+  { id: 6, type: "quote", quote: `"One of his strengths is not heading.”` },
+  {
+    id: 7,
+    type: "quote",
+    quote: `“We are three games without defeat is another way of looking at it. But if we are honest we have taken two points from nine.”`,
+  },
+  {
+    id: 8,
+    type: "quote",
+    quote: `“I’ll never play at Wembley again, unless I play at Wembley again.”`,
+  },
+  {
+    id: 9,
+    type: "quote",
+    quote: `“I know what is around the corner – I just don’t know where the corner is.”`,
+  },
+  {
+    id: 10,
+    type: "quote",
+    quote: `“Not many teams will come to Arsenal and get anything, home or away.”`,
+  },
+  {
+    id: 11,
+    type: "quote",
+    quote: `“We deserved to win this game after hammering them 0-0 in the first half.”`,
+  },
+  {
+    id: 12,
+    type: "quote",
+    quote: `“Argentina won't be at Euro 2000 because they're from South America.”`,
+  },
+  {
+    id: 13,
+    type: "quote",
+    quote: `“Football’s always easier when you've got the ball.”`,
+  },
+  {
+    id: 14,
+    type: "quote",
+    quote: `“They compare Steve McManaman to Steve Heighway and he's nothing like him, but I can see why - it's because he's a bit different.”`,
+  },
+  { id: 15, type: "quote", quote: `“We managed to wrong a few rights.”` },
+  {
+    id: 16,
+    type: "quote",
+    quote: `“That decision, for me, was almost certainly definitely wrong.”`,
+  },
+  {
+    id: 17,
+    type: "quote",
+    quote: `“Shaun Wright-Phillips has got a big heart. It's as big as him, which isn't very big, but it's bigger.”`,
+  },
+  { id: 18, type: "quote", quote: `“The tide is very much in our court now.”` },
+  {
+    id: 19,
+    type: "quote",
+    quote: `“I came to Nantes two years ago and it's much the same today, except that it's totally different.”`,
+  },
+  {
+    id: 20,
+    type: "quote",
+    quote: `“I’m not disappointed - just disappointed.”`,
+  },
+  {
+    id: 21,
+    type: "quote",
+    quote: `“Life wouldn’t be worth living if you could buy confidence because the rich people would have it all and everybody else would… would have to make their own arrangements.”`,
+  },
+  {
+    id: 22,
+    type: "quote",
+    quote: `”He scores most of his goals when he's got the ball."`,
+  },
+  {
+    id: 23,
+    type: "quote",
+    quote: `“Gary always weighed up his options, especially when he had no choice.”`,
+  },
+  {
+    id: 24,
+    type: "quote",
+    quote: `“I’d love to be a mole on the wall in the dressing room.”`,
+  },
+  {
+    id: 25,
+    type: "quote",
+    quote: `“Chile have three options – they could win or they could lose.”`,
+  },
+  {
+    id: 26,
+    type: "quote",
+    quote: `”That would have been a goal if it wasn't saved.”`,
+  },
+  {
+    id: 27,
+    type: "quote",
+    quote: `“I want more from David Beckham. I want him to improve on perfection.”`,
+  },
+  {
+    id: 28,
+    type: "quote",
+    quote: `“In some ways, cramp is worse than having a broken leg.”`,
+  },
+  {
+    id: 29,
+    type: "quote",
+    quote: `“He can't speak Turkey, but you can tell he's delighted.”`,
+  },
+  {
+    id: 30,
+    type: "quote",
+    quote: `“Despite his white boots, he has real pace…”`,
+  },
+  {
+    id: 31,
+    type: "quote",
+    quote: `“There’s a slight doubt about only one player, and that's Tony Adams, who definitely won't be playing tomorrow.”`,
+  },
+  { id: 32, type: "quote", quote: `“The ref was vertically 15 yards away.”` },
+  {
+    id: 33,
+    type: "quote",
+    quote: `“It could be far worse for me if it was easy for me.”`,
+  },
+  {
+    id: 34,
+    type: "quote",
+    quote: `“The substitute is about to come on - he's a player who was left out of the starting line-up today.”`,
+  },
+  {
+    id: 35,
+    type: "quote",
+    quote: `“You get bunches of players like you do bananas, though that is a bad comparison.”`,
+  },
+  {
+    id: 36,
+    type: "quote",
+    quote: `“Luis Figo is totally different to David Beckham, and vice versa.”`,
+  },
+  {
+    id: 37,
+    type: "quote",
+    quote: `“You’re not just getting international football, you're getting world football.”`,
+  },
+  {
+    id: 38,
+    type: "quote",
+    quote: `“Nicolas Anelka left Arsenal for £23million and they built a training ground on him.”`,
+  },
+  {
+    id: 39,
+    type: "quote",
+    quote: `“Goalkeepers aren't born today until they're in their late twenties or thirties.”`,
+  },
+  {
+    id: 40,
+    type: "quote",
+    quote: `“England can end the millennium as it started – as the greatest football nation in the world.”`,
+  },
+  {
+    id: 41,
+    type: "quote",
+    quote: `“I’ve had an interest in racing all my life, or longer really.”`,
+  },
+  {
+    id: 42,
+    type: "quote",
+    quote: `“I don't think there's anyone bigger or smaller than Maradona.”`,
+  },
+  {
+    id: 43,
+    type: "quote",
+    quote: `“It’s understandable that people are keeping one eye on the pot and another up the chimney.”`,
+  },
+  {
+    id: 44,
+    type: "quote",
+    quote: `“England have the best fans in the world and Scotland's fans are second-to-none.”`,
+  },
+  {
+    id: 45,
+    type: "quote",
+    quote: `“He’s using his strength. And that is his strength – his strength.”`,
+  },
+  {
+    id: 46,
+    type: "quote",
+    quote: `“There’ll be no siestas in Madrid tonight.”`,
+  },
+  {
+    id: 47,
+    type: "quote",
+    quote: `“The 33 or 34-year-olds will be 36 or 37 by the time the next World Cup comes around, if they're not careful.”`,
+  },
+  {
+    id: 48,
+    type: "quote",
+    quote: `“You can't do better than go away from home and get a draw…”`,
+  },
+  { id: 49, type: "quote", quote: `“I used to use my brother as a goalpost.”` },
+  {
+    id: 50,
+    type: "quote",
+    quote: `“For years my daughters thought I was a professional golfer.”`,
+  },
+  {
+    id: 51,
+    type: "quote",
+    quote: `“My wife Jean has always taken football with a pinch of salt. After matches, if you've lost she knows not to say too much for about 24 hours while you get over it and if you've won she knows I might take her out at night.”`,
+  },
 ];
+
+// <iframe
+//   width="560"
+//   height="315"
+//   src="https://www.youtube.com/embed/uDe8EsBBfm0?start=14"
+//   frameborder="0"
+//   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+//   allowfullscreen
+// />,
+
+// <iframe
+//   width="560"
+//   height="315"
+//   src="https://www.youtube.com/embed/2BWAL7ADsi0"
+//   frameborder="0"
+//   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+//   allowfullscreen
+// />,
+
+// <TwitterTweetEmbed tweetId={'1097986907873644544'} />,
 
 export const OWEN = [
   "“It’s a good run, but it’s a poor run, if you know what I mean?”",

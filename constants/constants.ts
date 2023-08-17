@@ -5,5 +5,6 @@ export const width = Dimensions.get("window").width;
 
 export const ROUTE = {
   HOME: "HOME",
+  FAVOURITES: "FAVOURITES",
   GAME: "GAME",
 };
