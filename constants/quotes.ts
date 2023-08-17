@@ -1,3 +1,9 @@
+export interface KeggyProps {
+  id: number;
+  type: string;
+  quote: string;
+}
+
 export const KEGGY = [
   {
     id: 1,
@@ -234,25 +240,22 @@ export const KEGGY = [
     type: "quote",
     quote: `“My wife Jean has always taken football with a pinch of salt. After matches, if you've lost she knows not to say too much for about 24 hours while you get over it and if you've won she knows I might take her out at night.”`,
   },
+  {
+    id: 52,
+    type: "video",
+    quote: `uDe8EsBBfm0`,
+  },
+  {
+    id: 53,
+    type: "video",
+    quote: `2BWAL7ADsi0`,
+  },
+  {
+    id: 54,
+    type: "video",
+    quote: `a6QKT3x3ii8`,
+  },
 ];
-
-// <iframe
-//   width="560"
-//   height="315"
-//   src="https://www.youtube.com/embed/uDe8EsBBfm0?start=14"
-//   frameborder="0"
-//   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-//   allowfullscreen
-// />,
-
-// <iframe
-//   width="560"
-//   height="315"
-//   src="https://www.youtube.com/embed/2BWAL7ADsi0"
-//   frameborder="0"
-//   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-//   allowfullscreen
-// />,
 
 // <TwitterTweetEmbed tweetId={'1097986907873644544'} />,
 

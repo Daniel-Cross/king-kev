@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import { LOGO_FONT } from "../constants/typography";
-import { KEGGY } from "../constants/quotes";
+import { KEGGY, KeggyProps } from "../constants/quotes";
 import { useEffect, useRef, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { width } from "../constants/constants";
@@ -23,6 +23,7 @@ import YoutubePlayer from "react-native-youtube-iframe";
 
 const Home = () => {
   const [hideIcons, setHideIcons] = useState(false);
+  const [randomisedKEGGY, setRandomisedKEGGY] = useState<KeggyProps[]>([]);
   const viewRef = useRef();
   const dispatch = useDispatch();
   const { favourites } = useSelector((state: RootState) => state.favourites);
@@ -40,8 +41,16 @@ const Home = () => {
     }
   }, [focused]);
 
-  const handleAddToFavourites = async (quote: string) => {
-    dispatch(updateFavourites(quote));
+  useEffect(() => {
+    const randomiseQuotes = (quotes: KeggyProps[]) => {
+      return [...quotes].sort(() => Math.random() - 0.5);
+    };
+
+    setRandomisedKEGGY(randomiseQuotes(KEGGY));
+  }, []);
+
+  const handleAddToFavourites = async (id: number) => {
+    dispatch(updateFavourites(id));
 
     try {
       await soundObject.unloadAsync();
@@ -49,7 +58,7 @@ const Home = () => {
       console.error("Error unloading previous sound:", error);
     }
 
-    if (!favourites.includes(quote)) {
+    if (!favourites.includes(id)) {
       try {
         await soundObject.loadAsync(require("../assets/sounds/loveIt.mp3"));
         await soundObject.playAsync();
@@ -104,27 +113,31 @@ const Home = () => {
             [{ nativeEvent: { contentOffset: { x: scrollX } } }],
             { useNativeDriver: true }
           )}
-          data={KEGGY}
-          keyExtractor={(item) => item}
+          data={randomisedKEGGY}
+          keyExtractor={(item) => item.id.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
           pagingEnabled
           renderItem={({ item }) => {
             return (
               <View style={styles.quoteContainer}>
-                {/* <Text style={styles.text}>{item}</Text> */}
-                {/* <YoutubePlayer
-                  height={240}
-                  width={380}
-                  play={true}
-                  videoId={"2BWAL7ADsi0"}
-                /> */}
+                {item.type === "quote" && (
+                  <Text style={styles.text}>{item.quote}</Text>
+                )}
+                {item.type === "video" && (
+                  <YoutubePlayer
+                    height={240}
+                    width={380}
+                    play={false}
+                    videoId={item.quote}
+                  />
+                )}
                 <View style={styles.shareButtons}>
                   {!hideIcons && (
                     <>
-                      {favourites.includes(item) ? (
+                      {favourites.includes(item.id) ? (
                         <TouchableOpacity
-                          onPress={() => handleAddToFavourites(item)}
+                          onPress={() => handleAddToFavourites(item.id)}
                         >
                           <Ionicons
                             name="ios-heart"
@@ -134,7 +147,7 @@ const Home = () => {
                         </TouchableOpacity>
                       ) : (
                         <TouchableOpacity
-                          onPress={() => handleAddToFavourites(item)}
+                          onPress={() => handleAddToFavourites(item.id)}
                         >
                           <Ionicons
                             name="heart-outline"

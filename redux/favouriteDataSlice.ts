@@ -1,8 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface FavouriteProps {
-  favourites: string[];
+export interface FavouriteProps {
+  favourites: number[];
 }
 
 const initialState: FavouriteProps = {
@@ -13,28 +13,17 @@ export const favourites = createSlice({
   name: "favouritesData",
   initialState,
   reducers: {
-    setFavourites: (state, action: PayloadAction<string[]>) => {
+    setFavourites: (state, action: PayloadAction<number[]>) => {
       state.favourites = action.payload;
     },
-    updateFavourites: (state, action: PayloadAction<any>) => {
-      const checkForDuplicates = state.favourites.some(
-        (quote) => quote === action.payload
-      );
-
-      if (checkForDuplicates) {
-        const removeDuplicates = state.favourites.filter(
-          (quote) => quote !== action.payload
-        );
-        state.favourites = removeDuplicates;
-        AsyncStorage.setItem("favourites", JSON.stringify(state.favourites)); // Save to AsyncStorage
-        return state;
+    updateFavourites: (state, action: PayloadAction<number>) => {
+      const quoteId = action.payload;
+      if (state.favourites.includes(quoteId)) {
+        state.favourites = state.favourites.filter((id) => id !== quoteId);
+      } else {
+        state.favourites.push(quoteId);
       }
-
-      if (!checkForDuplicates) {
-        state.favourites.push(action.payload);
-        AsyncStorage.setItem("favourites", JSON.stringify(state.favourites)); // Save to AsyncStorage
-        return state;
-      }
+      AsyncStorage.setItem("favourites", JSON.stringify(state.favourites)); // Save to AsyncStorage
     },
     clearFavourites: (state) => {
       state = initialState;

@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 import { LOGO_FONT } from "../constants/typography";
+import { KEGGY } from "../constants/quotes";
 import { useEffect, useRef, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { width } from "../constants/constants";
@@ -18,9 +19,10 @@ import { Audio } from "expo-av";
 import { useIsFocused } from "@react-navigation/native";
 import * as Sharing from "expo-sharing";
 import { captureRef } from "react-native-view-shot";
+import YoutubePlayer from "react-native-youtube-iframe";
 import EmptyState from "../components/atoms/EmptyState";
 
-const Favorites = () => {
+const Favourites = () => {
   const [hideIcons, setHideIcons] = useState(false);
   const viewRef = useRef();
   const dispatch = useDispatch();
@@ -39,8 +41,8 @@ const Favorites = () => {
     }
   }, [focused]);
 
-  const handleAddToFavourites = async (quote: string) => {
-    dispatch(updateFavourites(quote));
+  const handleAddToFavourites = async (id: number) => {
+    dispatch(updateFavourites(id));
 
     try {
       await soundObject.unloadAsync();
@@ -48,7 +50,7 @@ const Favorites = () => {
       console.error("Error unloading previous sound:", error);
     }
 
-    if (!favourites.includes(quote)) {
+    if (!favourites.includes(id)) {
       try {
         await soundObject.loadAsync(require("../assets/sounds/loveIt.mp3"));
         await soundObject.playAsync();
@@ -91,6 +93,8 @@ const Favorites = () => {
     }
   };
 
+  console.log(favourites);
+
   return (
     <LinearGradient
       colors={["#FB5FA1", "#F4AA60"]}
@@ -104,21 +108,31 @@ const Favorites = () => {
               [{ nativeEvent: { contentOffset: { x: scrollX } } }],
               { useNativeDriver: true }
             )}
-            data={favourites}
-            keyExtractor={(item) => item}
+            data={KEGGY.filter((item) => favourites.includes(item.id))}
+            keyExtractor={(item) => item.id.toString()}
             horizontal
             showsHorizontalScrollIndicator={false}
             pagingEnabled
             renderItem={({ item }) => {
               return (
                 <View style={styles.quoteContainer}>
-                  <Text style={styles.text}>{item}</Text>
+                  {item.type === "quote" && (
+                    <Text style={styles.text}>{item.quote}</Text>
+                  )}
+                  {item.type === "video" && (
+                    <YoutubePlayer
+                      height={240}
+                      width={380}
+                      play={false}
+                      videoId={item.quote}
+                    />
+                  )}
                   <View style={styles.shareButtons}>
                     {!hideIcons && (
                       <>
-                        {favourites.includes(item) ? (
+                        {favourites.includes(item.id) ? (
                           <TouchableOpacity
-                            onPress={() => handleAddToFavourites(item)}
+                            onPress={() => handleAddToFavourites(item.id)}
                           >
                             <Ionicons
                               name="ios-heart"
@@ -128,7 +142,7 @@ const Favorites = () => {
                           </TouchableOpacity>
                         ) : (
                           <TouchableOpacity
-                            onPress={() => handleAddToFavourites(item)}
+                            onPress={() => handleAddToFavourites(item.id)}
                           >
                             <Ionicons
                               name="heart-outline"
@@ -185,4 +199,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Favorites;
+export default Favourites;
