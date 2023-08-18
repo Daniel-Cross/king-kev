@@ -5,9 +5,13 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabNavigation from "./TabNavigation";
+import Who from "../screens/Who";
+import WhoIntroduction from "../screens/WhoIntroduction";
 
 type MainStackParamList = {
   Home: undefined;
+  WhoIntroduction: undefined;
+  Who: undefined;
 };
 
 interface HomeScreenProps {
@@ -28,6 +32,8 @@ const Routes = () => {
         }}
       >
         <MainStack.Screen name="Home" component={TabNavigation} />
+        <MainStack.Screen name="WhoIntroduction" component={WhoIntroduction} />
+        <MainStack.Screen name="Who" component={Who} />
       </MainStack.Navigator>
     );
   };

@@ -255,82 +255,216 @@ export const KEGGY = [
     type: "video",
     quote: `a6QKT3x3ii8`,
   },
+  // {
+  //   id: 55,
+  //   type: "image",
+  //   quote: require("../assets/keeganAirport.png"),
+  // },
 ];
 
 // <TwitterTweetEmbed tweetId={'1097986907873644544'} />,
 
 export const OWEN = [
-  "“It’s a good run, but it’s a poor run, if you know what I mean?”",
-
-  "“Footballers these days often have to use their feet.”",
-
-  "“He looks like a footballer.”",
-
-  "“What a shot! That’s completely unstoppable but the goalkeeper has got to do better for me.”",
-
-  "“He’s elbowed him in the head, but there’s nothing in it for me.”",
-
-  "“Alderweireld played really well last year for Tottenham, let’s hope he can transfer that form to Spurs this season.”",
-
-  "“That would’ve been a goal had it gone inside the post.”",
-
-  "“Whichever team scores more goals usually wins.”",
-
-  "That’s a fantastic penalty, but he’ll be gutted it went wide.”",
-
-  "“I doubt Everton are going to get anything out of this game.” (50 minutes played at Anfield, Liverpool 4 Everton 0)",
-
-  "“It’s hit the facial part of his head, there.”",
-
-  "“What a shot! That’s completely unstoppable, but the keeper’s got to do better for me.”",
-
-  "“What a feeling it is to be a manager and bring someone on.”",
-
-  "“When they don’t score, they hardly ever win.”",
-
-  "“If there’s a bit of rain about, it makes the surface wet.”",
-
-  "“Do they deserve to win? No, Liverpool do. Which is why a draw is a fair result.”",
-
-  "“Pellegrini will speak to them and City will come out with a fresh set of impetus.”",
-
-  "“To stay in the game, you have to stay in the game.”",
-
-  "“When the ball is that still, it’s wobbling in the air.”",
-
-  "“That shot is impossible. I saw Yaya Toure do it once.”",
-
-  "“I don’t listen to anything. I don’t know why, but the car’s always been my own quiet space. When the kids are in the car they always want a song on, but I’m just happy with my thoughts.”",
-
-  "“It’s very boring, but I don’t watch films. I think I’ve seen about five in my life. “I just can’t get into them. I do try – someone will say, ‘Watch this film, it’s great,’ and I’ll try but after half an hour, 40 minutes I can’t take it any longer.”",
-
-  "“If I’m eating cheese on its own with a cracker it has to be really strong. I can handle a strong cheese. Stilton, things like that. If you’re buying mature cheese, then Canadian is probably the strongest one. Canadian extra mature, or Stilton, or anything that really stinks. That’s only really happened in the last five years. Before that, I preferred a milder cheese.”",
-
-  "“Often the biggest test is when the chips are down and you’ve got to stick together as a team.”",
-
-  "“If you only ever give 90% in training then you will only ever give 90% when it matters.”",
-
-  "“I don’t believe in superstitions. I just do certain things because I’m scared in case something will happen if I don’t do them.”",
-
-  "“You need people who score goals. That’s how you win games.”",
-
-  "“You always come back to earth with a thump at some stage. Life has it’s ups and downs; the acid test is how you handle the downs.”",
-
-  "“I can’t believe anyone can have played the game of football as well as Messi.”",
-
-  "“A new club is like having a new girlfriend – you don’t have feelings straight away.”",
-
-  "“I hate to admit this but I don’t even know how to make a cup of tea or coffee. I can boil a kettle for a pot noodle and I’ve been known to warm up some food in the microwave.”",
-
-  "“I don’t want to be modelling G-strings. It’s not that good for my image – I’m a footballer not a tart.”",
-
-  "“I wouldn’t change my life for the world at the moment.”",
-
-  "“You’re on your own out there with ten mates.”",
-
-  "“England have players who can rattle anyone’s feathers.”",
-
-  "“If you cut me in half, I’m a footballer.”",
-
-  "“I was born to score goals, I feel.”",
+  {
+    quote: "“It’s a good run, but it’s a poor run, if you know what I mean?”",
+    type: "quote",
+    id: 1,
+  },
+  {
+    quote: "“Footballers these days often have to use their feet.”",
+    type: "quote",
+    id: 2,
+  },
+  {
+    quote: "“He looks like a footballer.”",
+    type: "quote",
+    id: 3,
+  },
+  {
+    quote:
+      "“What a shot! That’s completely unstoppable but the goalkeeper has got to do better for me.”",
+    type: "quote",
+    id: 4,
+  },
+  {
+    quote: "“He’s elbowed him in the head, but there’s nothing in it for me.”",
+    type: "quote",
+    id: 5,
+  },
+  {
+    quote:
+      "“Alderweireld played really well last year for Tottenham, let’s hope he can transfer that form to Spurs this season.”",
+    type: "quote",
+    id: 6,
+  },
+  {
+    quote: "“That would’ve been a goal had it gone inside the post.”",
+    type: "quote",
+    id: 7,
+  },
+  {
+    quote: "“Whichever team scores more goals usually wins.”",
+    type: "quote",
+    id: 8,
+  },
+  {
+    quote: "That’s a fantastic penalty, but he’ll be gutted it went wide.”",
+    type: "quote",
+    id: 9,
+  },
+  {
+    quote:
+      "“I doubt Everton are going to get anything out of this game.” (50 minutes played at Anfield, Liverpool 4 Everton 0)",
+    type: "quote",
+    id: 10,
+  },
+  {
+    quote: "“It’s hit the facial part of his head, there.”",
+    type: "quote",
+    id: 11,
+  },
+  {
+    quote:
+      "“What a shot! That’s completely unstoppable, but the keeper’s got to do better for me.”",
+    type: "quote",
+    id: 12,
+  },
+  {
+    quote: "“What a feeling it is to be a manager and bring someone on.”",
+    type: "quote",
+    id: 13,
+  },
+  {
+    quote: "“When they don’t score, they hardly ever win.”",
+    type: "quote",
+    id: 14,
+  },
+  {
+    quote: "“If there’s a bit of rain about, it makes the surface wet.”",
+    type: "quote",
+    id: 15,
+  },
+  {
+    quote:
+      "“Do they deserve to win? No, Liverpool do. Which is why a draw is a fair result.”",
+    type: "quote",
+    id: 16,
+  },
+  {
+    quote:
+      "“Pellegrini will speak to them and City will come out with a fresh set of impetus.”",
+    type: "quote",
+    id: 17,
+  },
+  {
+    quote: "“To stay in the game, you have to stay in the game.”",
+    type: "quote",
+    id: 18,
+  },
+  {
+    quote: "“When the ball is that still, it’s wobbling in the air.”",
+    type: "quote",
+    id: 19,
+  },
+  {
+    quote: "“That shot is impossible. I saw Yaya Toure do it once.”",
+    type: "quote",
+    id: 20,
+  },
+  {
+    quote:
+      "“I don’t listen to anything. I don’t know why, but the car’s always been my own quiet space. When the kids are in the car they always want a song on, but I’m just happy with my thoughts.”",
+    type: "quote",
+    id: 21,
+  },
+  {
+    quote:
+      "“It’s very boring, but I don’t watch films. I think I’ve seen about five in my life. “I just can’t get into them. I do try – someone will say, ‘Watch this film, it’s great,’ and I’ll try but after half an hour, 40 minutes I can’t take it any longer.”",
+    type: "quote",
+    id: 22,
+  },
+  {
+    quote:
+      "“If I’m eating cheese on its own with a cracker it has to be really strong. I can handle a strong cheese. Stilton, things like that. If you’re buying mature cheese, then Canadian is probably the strongest one. Canadian extra mature, or Stilton, or anything that really stinks. That’s only really happened in the last five years. Before that, I preferred a milder cheese.”",
+    type: "quote",
+    id: 23,
+  },
+  {
+    quote:
+      "“Often the biggest test is when the chips are down and you’ve got to stick together as a team.”",
+    type: "quote",
+    id: 24,
+  },
+  {
+    quote:
+      "“If you only ever give 90% in training then you will only ever give 90% when it matters.”",
+    type: "quote",
+    id: 25,
+  },
+  {
+    quote:
+      "“I don’t believe in superstitions. I just do certain things because I’m scared in case something will happen if I don’t do them.”",
+    type: "quote",
+    id: 26,
+  },
+  {
+    quote: "“You need people who score goals. That’s how you win games.”",
+    type: "quote",
+    id: 27,
+  },
+  {
+    quote:
+      "“You always come back to earth with a thump at some stage. Life has it’s ups and downs; the acid test is how you handle the downs.”",
+    type: "quote",
+    id: 28,
+  },
+  {
+    quote:
+      "“I can’t believe anyone can have played the game of football as well as Messi.”",
+    type: "quote",
+    id: 29,
+  },
+  {
+    quote:
+      "“A new club is like having a new girlfriend – you don’t have feelings straight away.”",
+    type: "quote",
+    id: 30,
+  },
+  {
+    quote:
+      "“I hate to admit this but I don’t even know how to make a cup of tea or coffee. I can boil a kettle for a pot noodle and I’ve been known to warm up some food in the microwave.”",
+    type: "quote",
+    id: 31,
+  },
+  {
+    quote:
+      "“I don’t want to be modelling G-strings. It’s not that good for my image – I’m a footballer not a tart.”",
+    type: "quote",
+    id: 32,
+  },
+  {
+    quote: "“I wouldn’t change my life for the world at the moment.”",
+    type: "quote",
+    id: 33,
+  },
+  {
+    quote: "“You’re on your own out there with ten mates.”",
+    type: "quote",
+    id: 34,
+  },
+  {
+    quote: "“England have players who can rattle anyone’s feathers.”",
+    type: "quote",
+    id: 35,
+  },
+  {
+    quote: "“If you cut me in half, I’m a footballer.”",
+    type: "quote",
+    id: 36,
+  },
+  {
+    quote: "“I was born to score goals, I feel.”",
+    type: "quote",
+    id: 37,
+  },
 ];

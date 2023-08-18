@@ -1,7 +1,9 @@
 import { LinearGradient } from "expo-linear-gradient";
 import {
   Animated,
+  Image,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -108,69 +110,84 @@ const Home = () => {
       ref={viewRef}
     >
       <SafeAreaView>
-        <Animated.FlatList
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-            { useNativeDriver: true }
-          )}
-          data={randomisedKEGGY}
-          keyExtractor={(item) => item.id.toString()}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-          renderItem={({ item }) => {
-            return (
-              <View style={styles.quoteContainer}>
-                {item.type === "quote" && (
-                  <Text style={styles.text}>{item.quote}</Text>
-                )}
-                {item.type === "video" && (
-                  <YoutubePlayer
-                    height={240}
-                    width={380}
-                    play={false}
-                    videoId={item.quote}
-                  />
-                )}
-                <View style={styles.shareButtons}>
-                  {!hideIcons && (
-                    <>
-                      {favourites.includes(item.id) ? (
-                        <TouchableOpacity
-                          onPress={() => handleAddToFavourites(item.id)}
-                        >
+        <ScrollView
+          contentContainerStyle={{
+            justifyContent: "center",
+            alignItems: "center",
+            flexGrow: 1,
+          }}
+          style={{ flex: 1 }}
+        >
+          <Animated.FlatList
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+              { useNativeDriver: true }
+            )}
+            data={randomisedKEGGY}
+            keyExtractor={(item) => item.id.toString()}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            pagingEnabled
+            renderItem={({ item }) => {
+              return (
+                <View style={styles.quoteContainer}>
+                  {item.type === "quote" && (
+                    <Text style={styles.text}>{item.quote}</Text>
+                  )}
+                  {item.type === "video" && (
+                    <YoutubePlayer
+                      height={240}
+                      width={380}
+                      play={false}
+                      videoId={item.quote}
+                    />
+                  )}
+                  {item.type === "image" && (
+                    <Image
+                      source={item.quote}
+                      style={{ width: 380, height: "100%" }}
+                    />
+                  )}
+                  <View style={styles.shareButtons}>
+                    {!hideIcons && (
+                      <>
+                        {favourites.includes(item.id) ? (
+                          <TouchableOpacity
+                            onPress={() => handleAddToFavourites(item.id)}
+                          >
+                            <Ionicons
+                              name="ios-heart"
+                              size={30}
+                              color="#fb3958"
+                            />
+                          </TouchableOpacity>
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => handleAddToFavourites(item.id)}
+                          >
+                            <Ionicons
+                              name="heart-outline"
+                              size={30}
+                              color="white"
+                            />
+                          </TouchableOpacity>
+                        )}
+
+                        <TouchableOpacity onPress={() => handleShare()}>
                           <Ionicons
-                            name="ios-heart"
-                            size={30}
-                            color="#fb3958"
-                          />
-                        </TouchableOpacity>
-                      ) : (
-                        <TouchableOpacity
-                          onPress={() => handleAddToFavourites(item.id)}
-                        >
-                          <Ionicons
-                            name="heart-outline"
+                            name="ios-share-outline"
                             size={30}
                             color="white"
                           />
                         </TouchableOpacity>
-                      )}
-
-                      <TouchableOpacity onPress={() => handleShare()}>
-                        <Ionicons
-                          name="ios-share-outline"
-                          size={30}
-                          color="white"
-                        />
-                      </TouchableOpacity>
-                    </>
-                  )}
+                      </>
+                    )}
+                  </View>
                 </View>
-              </View>
-            );
-          }}
-        />
+              );
+            }}
+          />
+        </ScrollView>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -178,7 +195,6 @@ const Home = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
     position: "absolute",
     left: 0,
