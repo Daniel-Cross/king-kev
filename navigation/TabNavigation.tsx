@@ -5,6 +5,7 @@ import { PRIMARY } from "../constants/colours";
 import Home from "../screens/Home";
 import Game from "../screens/Game";
 import Favourites from "../screens/Favourites";
+import WhoIntroduction from "../screens/WhoIntroduction";
 
 type TabParamList = {
   HOME: undefined;
@@ -58,7 +59,7 @@ const TabNavigation = () => {
       />
       <Tab.Screen
         name="GAME"
-        component={Game}
+        component={WhoIntroduction}
         options={{ tabBarShowLabel: false }}
       />
     </Tab.Navigator>

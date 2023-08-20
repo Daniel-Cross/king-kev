@@ -93,9 +93,40 @@ const Who = () => {
     });
   };
 
-  const numberOfCorrectAnswers = answers.filter(
-    (answer) => answer === "correct"
-  ).length;
+  const numberOfCorrectAnswers =
+    answers.filter((answer) => answer === "correct").length || 0;
+
+  const endGameScore = () => {
+    if (numberOfCorrectAnswers < 4) {
+      return {
+        image: require("../assets/badScore.png"),
+        text: `Ooooooh, that's not good... You got ${numberOfCorrectAnswers} out of 10 correct.`,
+      };
+    }
+    if (numberOfCorrectAnswers < 7 && numberOfCorrectAnswers >= 4) {
+      return {
+        image: require("../assets/okayScore.png"),
+        text: `Not bad, you got ${numberOfCorrectAnswers} out of 10 correct.`,
+      };
+    }
+    if (numberOfCorrectAnswers < 10 && numberOfCorrectAnswers >= 7) {
+      return {
+        image: require("../assets/goodScore.png"),
+        text: `Very good, you got ${numberOfCorrectAnswers} out of 10 correct.`,
+      };
+    }
+    if (numberOfCorrectAnswers === 10) {
+      return {
+        image: require("../assets/perfectScore.png"),
+        text: `Perfect score! You got ${numberOfCorrectAnswers} out of 10 correct.`,
+      };
+    } else {
+      return {
+        image: require("../assets/badScore.png"),
+        text: `Ooooooh, that's not good... You got ${numberOfCorrectAnswers} out of 10 correct.`,
+      };
+    }
+  };
 
   return (
     <>
@@ -110,9 +141,18 @@ const Who = () => {
         <SafeAreaView>
           <View style={styles.contentContainer}>
             {gameEnded ? (
-              <Text style={styles.quote}>
-                Game Over! You got {numberOfCorrectAnswers} out of 10 correct!
-              </Text>
+              <View style={styles.scoreContainer}>
+                <Image
+                  source={endGameScore().image}
+                  style={{
+                    width: 200,
+                    height: 200,
+                    borderRadius: 100,
+                    marginBottom: 30,
+                  }}
+                />
+                <Text style={styles.quote}>{endGameScore().text}</Text>
+              </View>
             ) : (
               <>
                 <Animated.View
@@ -199,6 +239,11 @@ const styles = StyleSheet.create({
     height: 120,
     width: 120,
     borderRadius: 100,
+  },
+  scoreContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
   },
 });
 

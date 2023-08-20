@@ -23,12 +23,12 @@ const WhoIntroduction = () => {
           contentContainerStyle={{ alignItems: "center" }}
           style={styles.introContainer}
         >
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={styles.backButton}
           >
             <Ionicons name="arrow-back-outline" size={30} color="white" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <Text style={styles.title}>Who Said It?</Text>
           <View style={styles.imageContainer}>
             <Image

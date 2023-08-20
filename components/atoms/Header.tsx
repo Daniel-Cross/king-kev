@@ -51,7 +51,7 @@ const Header = ({
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => handleBack()} style={styles.backButton}>
-        <Ionicons name="close-circle-outline" size={30} color="white" />
+        <Ionicons name="close-outline" size={30} color="white" />
       </TouchableOpacity>
       {!gameEnded && <Text style={styles.timer}>{timer}</Text>}
     </View>
