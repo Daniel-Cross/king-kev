@@ -118,7 +118,7 @@ const Who = () => {
     }
     if (numberOfCorrectAnswers === 10) {
       return {
-        image: require("../assets/perfectScore.png"),
+        image: require("../assets/perfectScore.jpeg"),
         text: `You definitely know your Keggy! You got ${numberOfCorrectAnswers} out of 10 correct.`,
       };
     } else {

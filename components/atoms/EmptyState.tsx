@@ -5,7 +5,7 @@ const EmptyState = () => {
   return (
     <View style={styles.container}>
       <Image
-        source={require("../../assets/keeganFavourites.png")}
+        source={require("../../assets/keeganFavourites.jpeg")}
         style={styles.image}
       />
       <Text style={styles.text}>
