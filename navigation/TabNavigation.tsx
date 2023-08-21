@@ -30,6 +30,7 @@ const TabNavigation = () => {
           position: "absolute",
           paddingTop: 10,
           backgroundColor: "transparent",
+          elevation: 0,
         },
         tabBarIcon: ({ color }) => {
           let iconName: any;

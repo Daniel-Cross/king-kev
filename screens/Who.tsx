@@ -14,6 +14,7 @@ import { KEGGY, OWEN } from "../constants/quotes";
 import { useEffect, useMemo, useState } from "react";
 import QuitModal from "../components/molecules/QuitModal";
 import { LOGO_FONT } from "../constants/typography";
+import { IS_IOS } from "../constants/constants";
 
 const Who = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -155,7 +156,12 @@ const Who = () => {
               </View>
             ) : (
               <>
-                <Animated.View
+                <Animated.ScrollView
+                  contentContainerStyle={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flex: 1,
+                  }}
                   style={{
                     ...styles.quoteContainer,
                     transform: [{ translateX: positionAnim }],
@@ -164,7 +170,7 @@ const Who = () => {
                   <Text style={styles.quote}>
                     {finalRandomizedArray[currentIndex].quote}
                   </Text>
-                </Animated.View>
+                </Animated.ScrollView>
                 <View style={styles.buttonContainer}>
                   <TouchableOpacity
                     style={styles.button}
@@ -210,8 +216,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   quoteContainer: {
-    flex: 1,
-    justifyContent: "center",
+    marginTop: IS_IOS() ? 80 : 100,
   },
   buttonContainer: {
     flexDirection: "row",

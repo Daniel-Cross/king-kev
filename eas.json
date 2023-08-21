@@ -1,0 +1,52 @@
+{
+  "build": {
+    "production": {
+      "node": "14.18.0",
+      "env": {
+        "EXPO_BUILD_ENV": "production",
+        "resourceClass": "m-medium"
+      }
+    },
+    "test": {
+      "node": "14.18.0",
+      "releaseChannel": "test",
+      "env": {
+        "EXPO_BUILD_ENV": "test",
+        "resourceClass": "m-medium"
+      }
+    },
+    "development": {
+      "node": "14.18.0",
+      "distribution": "internal",
+      "developmentClient": true,
+      "env": {
+        "EXPO_BUILD_ENV": "dev",
+        "resourceClass": "m-medium"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "track": "internal",
+        "releaseStatus": "completed"
+      },
+      "ios": {
+        "appleId": "hello@danielcross.dev",
+        // "ascAppId": "6449934429",
+        "appleTeamId": "3XQC7HQMCS"
+      }
+    },
+    "test": {
+      "android": {
+        "track": "internal",
+        "releaseStatus": "completed"
+      },
+      "ios": {
+        "appleId": "hello@danielcross.dev",
+        // "ascAppId": "6449934429",
+        "appleTeamId": "3XQC7HQMCS"
+      }
+    }
+  }
+}
