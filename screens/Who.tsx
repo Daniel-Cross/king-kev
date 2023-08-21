@@ -119,7 +119,7 @@ const Who = () => {
     if (numberOfCorrectAnswers === 10) {
       return {
         image: require("../assets/perfectScore.png"),
-        text: `Perfect score! You got ${numberOfCorrectAnswers} out of 10 correct.`,
+        text: `You definitely know your Keggy! You got ${numberOfCorrectAnswers} out of 10 correct.`,
       };
     } else {
       return {

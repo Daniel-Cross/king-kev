@@ -1,14 +1,14 @@
 {
   "build": {
     "production": {
-      "node": "14.18.0",
+      "node": "20.5.1",
       "env": {
         "EXPO_BUILD_ENV": "production",
         "resourceClass": "m-medium"
       }
     },
     "test": {
-      "node": "14.18.0",
+      "node": "20.5.1",
       "releaseChannel": "test",
       "env": {
         "EXPO_BUILD_ENV": "test",
@@ -16,7 +16,7 @@
       }
     },
     "development": {
-      "node": "14.18.0",
+      "node": "20.5.1",
       "distribution": "internal",
       "developmentClient": true,
       "env": {
