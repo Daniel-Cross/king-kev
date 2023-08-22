@@ -32,7 +32,7 @@ const WhoIntroduction = () => {
           <Text style={styles.title}>Who Said It?</Text>
           <View style={styles.imageContainer}>
             <Image
-              source={require("../assets/keggyThumb.png")}
+              source={require("../assets/keggyThumb.jpg")}
               style={styles.thumbImage}
             />
             <Text style={styles.title}>VS</Text>

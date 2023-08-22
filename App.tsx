@@ -5,7 +5,6 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "./hooks/fonts";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
-import { loadFavourites } from "./redux/favouriteDataSlice";
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
@@ -17,6 +16,8 @@ export default function App() {
   }, [isReady]);
 
   useEffect(() => {
+    SplashScreen.preventAutoHideAsync();
+
     async function prepare() {
       try {
         // Pre-load fonts, make any API calls you need to do here
@@ -34,10 +35,14 @@ export default function App() {
   if (!isReady) {
     return null;
   }
-  return (
-    <Provider store={store}>
-      <StatusBar style="auto" animated={true} />
-      <Routes />
-    </Provider>
-  );
+
+  if (isReady) {
+    SplashScreen.hideAsync();
+    return (
+      <Provider store={store}>
+        <StatusBar style="auto" animated={true} />
+        <Routes />
+      </Provider>
+    );
+  }
 }

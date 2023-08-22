@@ -106,7 +106,7 @@ const Who = () => {
     }
     if (numberOfCorrectAnswers < 7 && numberOfCorrectAnswers >= 4) {
       return {
-        image: require("../assets/okayScore.png"),
+        image: require("../assets/okayScore.jpeg"),
         text: `Not bad, you got ${numberOfCorrectAnswers} out of 10 correct.`,
       };
     }
@@ -177,7 +177,7 @@ const Who = () => {
                     onPress={() => handleAnswer("KEGGY")}
                   >
                     <Image
-                      source={require("../assets/keggyThumb.png")}
+                      source={require("../assets/keggyThumb.jpg")}
                       style={styles.thumbImage}
                     />
                     <Text style={styles.buttonText}>Keggy</Text>
