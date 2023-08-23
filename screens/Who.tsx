@@ -123,7 +123,7 @@ const Who = () => {
       };
     } else {
       return {
-        image: require("../assets/badScore.png"),
+        image: require("../assets/badScore.jpg"),
         text: `Ooooooh, that's not good... You got ${numberOfCorrectAnswers} out of 10 correct.`,
       };
     }
