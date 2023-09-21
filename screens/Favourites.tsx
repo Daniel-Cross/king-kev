@@ -98,7 +98,7 @@ const Favourites = () => {
     <LinearGradient
       colors={["#FB5FA1", "#F4AA60"]}
       style={styles.container}
-      ref={viewRef}
+      ref={() => viewRef}
     >
       <SafeAreaView>
         {favourites.length > 0 ? (
