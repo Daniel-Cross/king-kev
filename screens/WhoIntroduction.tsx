@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   introContainer: {
     height: "100%",
     width: "88%",
-    marginBottom: 60,
+    marginBottom: 40,
   },
   imageContainer: {
     flexDirection: "row",
