@@ -6,7 +6,11 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "prebuild-android": "chmod +x ./build-and-run-android.sh",
+    "build-android": "./build-and-run-android.sh",
+    "prebuild-ios": "chmod +x ./build-and-run-ios.sh",
+    "build-ios": "./build-and-run-ios.sh"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "2.2.0",
@@ -16,6 +20,8 @@
     "@reduxjs/toolkit": "^2.9.0",
     "expo": "^54.0.12",
     "expo-av": "~16.0.7",
+    "expo-build-properties": "~1.0.9",
+    "expo-dev-client": "~6.0.13",
     "expo-linear-gradient": "~15.0.7",
     "expo-media-library": "~18.2.0",
     "expo-sharing": "~14.0.7",
