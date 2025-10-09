@@ -3,25 +3,29 @@
     "production": {
       "node": "20.5.1",
       "env": {
-        "EXPO_BUILD_ENV": "production",
-        "resourceClass": "m-medium"
+        "EXPO_BUILD_ENV": "production"
       }
     },
     "test": {
       "node": "20.5.1",
       "releaseChannel": "test",
       "env": {
-        "EXPO_BUILD_ENV": "test",
-        "resourceClass": "m-medium"
+        "EXPO_BUILD_ENV": "test"
       }
     },
     "development": {
       "node": "20.5.1",
       "distribution": "internal",
       "developmentClient": true,
+      "android": {
+        "buildType": "apk",
+        "credentialsSource": "remote"
+      },
+      "ios": {
+        "simulator": true
+      },
       "env": {
-        "EXPO_BUILD_ENV": "dev",
-        "resourceClass": "m-medium"
+        "EXPO_BUILD_ENV": "dev"
       }
     }
   },

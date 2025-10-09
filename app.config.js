@@ -9,6 +9,7 @@ export default {
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
+    jsEngine: "hermes",
     splash: {
       image: "./assets/splash.png",
       resizeMode: "contain",
@@ -18,11 +19,13 @@ export default {
     ios: {
       supportsTablet: false,
       bundleIdentifier: "com.daniel.cross.keggy",
+      buildNumber: BUILD_NUMBER,
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
       },
     },
     android: {
+      versionCode: parseInt(BUILD_NUMBER, 10),
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff",
