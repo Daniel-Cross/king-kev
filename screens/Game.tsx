@@ -1,14 +1,9 @@
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { BODY_FONT, LOGO_FONT } from "../constants/typography";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Game = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();

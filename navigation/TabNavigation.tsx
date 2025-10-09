@@ -3,8 +3,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { IS_IOS, ROUTE } from "../constants/constants";
 import { PRIMARY } from "../constants/colours";
 import Home from "../screens/Home";
-import Game from "../screens/Game";
-import Favourites from "../screens/Favourites";
 import WhoIntroduction from "../screens/WhoIntroduction";
 
 type TabParamList = {
@@ -39,7 +37,7 @@ const TabNavigation = () => {
             iconName = "home-outline";
           }
           if (route.name === ROUTE.FAVOURITES) {
-            iconName = "ios-heart-outline";
+            iconName = "heart-outline";
           }
           if (route.name === ROUTE.GAME) {
             iconName = "game-controller-outline";
@@ -51,11 +49,6 @@ const TabNavigation = () => {
       <Tab.Screen
         name="HOME"
         component={Home}
-        options={{ tabBarShowLabel: false }}
-      />
-      <Tab.Screen
-        name="FAVOURITES"
-        component={Favourites}
         options={{ tabBarShowLabel: false }}
       />
       <Tab.Screen

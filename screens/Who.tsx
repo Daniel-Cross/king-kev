@@ -3,7 +3,6 @@ import {
   Animated,
   BackHandler,
   Image,
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -15,6 +14,7 @@ import { useEffect, useMemo, useState } from "react";
 import QuitModal from "../components/molecules/QuitModal";
 import { LOGO_FONT } from "../constants/typography";
 import { IS_IOS } from "../constants/constants";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Who = () => {
   const [currentIndex, setCurrentIndex] = useState(0);

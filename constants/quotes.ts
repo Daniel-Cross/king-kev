@@ -1,6 +1,8 @@
+import { QuoteType } from "./enums";
+
 export interface KeggyProps {
   id: number;
-  type: string;
+  type: QuoteType;
   quote: string;
 }
 
@@ -240,21 +242,21 @@ export const KEGGY = [
     type: "quote",
     quote: `“My wife Jean has always taken football with a pinch of salt. After matches, if you've lost she knows not to say too much for about 24 hours while you get over it and if you've won she knows I might take her out at night.”`,
   },
-  {
-    id: 52,
-    type: "video",
-    quote: `uDe8EsBBfm0`,
-  },
-  {
-    id: 53,
-    type: "video",
-    quote: `2BWAL7ADsi0`,
-  },
-  {
-    id: 54,
-    type: "video",
-    quote: `a6QKT3x3ii8`,
-  },
+  // {
+  //   id: 52,
+  //   type: "video",
+  //   quote: `uDe8EsBBfm0`,
+  // },
+  // {
+  //   id: 53,
+  //   type: "video",
+  //   quote: `2BWAL7ADsi0`,
+  // },
+  // {
+  //   id: 54,
+  //   type: "video",
+  //   quote: `a6QKT3x3ii8`,
+  // },
   // {
   //   id: 55,
   //   type: "image",

@@ -1,7 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient";
 import {
   Image,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,9 +8,9 @@ import {
   View,
 } from "react-native";
 import { BODY_FONT, LOGO_FONT } from "../constants/typography";
-import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const WhoIntroduction = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();

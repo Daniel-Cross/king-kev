@@ -2,7 +2,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import {
   Animated,
   Image,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,29 +11,49 @@ import {
 import { LOGO_FONT } from "../constants/typography";
 import { KEGGY, KeggyProps } from "../constants/quotes";
 import { useEffect, useRef, useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { width } from "../constants/constants";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
-import { loadFavourites, updateFavourites } from "../redux/favouriteDataSlice";
 import { Audio } from "expo-av";
 import { useIsFocused } from "@react-navigation/native";
 import * as Sharing from "expo-sharing";
 import { captureRef } from "react-native-view-shot";
-import YoutubePlayer from "react-native-youtube-iframe";
+import {
+  randomiseQuotes,
+  getNextQuotes,
+  handleQuoteScroll,
+} from "../helpers/quoteHelpers";
+import {
+  QuoteType,
+  IconName,
+  Color,
+  ImageSize,
+  Layout,
+} from "../constants/enums";
+import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  trackHeartPress,
+  getHeartCount,
+  hasUserHearted,
+  subscribeToHeartCounts,
+  initializeHeartCounts,
+} from "../helpers/analyticsHelpers";
 
 const Home = () => {
   const [hideIcons, setHideIcons] = useState(false);
   const [randomisedKEGGY, setRandomisedKEGGY] = useState<KeggyProps[]>([]);
-  const viewRef = useRef();
-  const dispatch = useDispatch();
-  const { favourites } = useSelector((state: RootState) => state.favourites);
+  const [displayedQuotes, setDisplayedQuotes] = useState<Set<number>>(
+    new Set()
+  );
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [heartCounts, setHeartCounts] = useState<{ [key: number]: number }>({});
+  const [userHearts, setUserHearts] = useState<{ [key: number]: boolean }>({});
+  const viewRef = useRef(null);
   const scrollX = useRef(new Animated.Value(0)).current;
   const focused = useIsFocused();
   const soundObject = useRef(new Audio.Sound()).current;
 
   useEffect(() => {
-    dispatch(loadFavourites());
+    initializeApp();
   }, []);
 
   useEffect(() => {
@@ -44,36 +63,103 @@ const Home = () => {
   }, [focused]);
 
   useEffect(() => {
-    const randomiseQuotes = (quotes: KeggyProps[]) => {
-      return [...quotes].sort(() => Math.random() - 0.5);
-    };
-
-    setRandomisedKEGGY(randomiseQuotes(KEGGY));
+    setRandomisedKEGGY(randomiseQuotes(KEGGY as KeggyProps[]));
+    setDisplayedQuotes(new Set());
+    setCurrentIndex(0);
   }, []);
 
-  const handleAddToFavourites = async (id: number) => {
-    dispatch(updateFavourites(id));
+  const initializeApp = async () => {
+    try {
+      // Initialize heart counts in global storage (only runs once)
+      await initializeHeartCounts();
+
+      // Load user's heart history locally
+      await loadUserHearts();
+
+      // Set up real-time listener for global heart counts
+      const unsubscribe = subscribeToHeartCounts((counts) => {
+        setHeartCounts(counts);
+      });
+
+      // Cleanup listener when component unmounts
+      return unsubscribe;
+    } catch (error) {
+      console.error("Error initializing app:", error);
+    }
+  };
+
+  const loadUserHearts = async () => {
+    try {
+      const hearts: { [key: number]: boolean } = {};
+      for (const quote of KEGGY) {
+        hearts[quote.id] = await hasUserHearted(quote.id);
+      }
+      setUserHearts(hearts);
+    } catch (error) {
+      console.error("Error loading user hearts:", error);
+    }
+  };
+
+  const getNextQuotesHandler = () => {
+    return getNextQuotes(
+      KEGGY as KeggyProps[],
+      displayedQuotes,
+      setRandomisedKEGGY,
+      setDisplayedQuotes
+    );
+  };
+
+  const handleScroll = (event: any) => {
+    handleQuoteScroll(
+      event,
+      width,
+      currentIndex,
+      randomisedKEGGY,
+      setCurrentIndex,
+      setDisplayedQuotes,
+      getNextQuotesHandler
+    );
+  };
+
+  const handleHeartPress = async (id: number) => {
+    const isCurrentlyHearted = userHearts[id] || false;
+    const newHeartState = !isCurrentlyHearted;
 
     try {
-      await soundObject.unloadAsync();
-    } catch (error) {
-      console.error("Error unloading previous sound:", error);
-    }
+      // Update heart count globally
+      const newCount = await trackHeartPress(id, newHeartState);
 
-    if (!favourites.includes(id)) {
-      try {
-        await soundObject.loadAsync(require("../assets/sounds/loveIt.mp3"));
-        await soundObject.playAsync();
-      } catch (error) {
-        console.error("Error playing loveIt.mp3:", error);
+      // Update local state
+      setHeartCounts((prev) => ({
+        ...prev,
+        [id]: newCount,
+      }));
+
+      setUserHearts((prev) => ({
+        ...prev,
+        [id]: newHeartState,
+      }));
+
+      // Play sound
+      await soundObject.unloadAsync();
+
+      if (newHeartState) {
+        try {
+          await soundObject.loadAsync(require("../assets/sounds/loveIt.mp3"));
+          await soundObject.playAsync();
+        } catch (error) {
+          console.error("Error playing loveIt.mp3:", error);
+        }
+      } else {
+        try {
+          await soundObject.loadAsync(require("../assets/sounds/ifOnly.mp3"));
+          await soundObject.playAsync();
+        } catch (error) {
+          console.error("Error playing ifOnly.mp3:", error);
+        }
       }
-    } else {
-      try {
-        await soundObject.loadAsync(require("../assets/sounds/ifOnly.mp3"));
-        await soundObject.playAsync();
-      } catch (error) {
-        console.error("Error playing ifOnly.mp3:", error);
-      }
+    } catch (error) {
+      console.error("Error handling heart press:", error);
     }
   };
 
@@ -105,15 +191,15 @@ const Home = () => {
 
   return (
     <LinearGradient
-      colors={["#FB5FA1", "#F4AA60"]}
+      colors={[Color.GRADIENT_START, Color.GRADIENT_END]}
       style={styles.container}
       ref={viewRef}
     >
       <SafeAreaView>
         <ScrollView
           contentContainerStyle={{
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: Layout.CENTER,
+            alignItems: Layout.CENTER,
             flexGrow: 1,
           }}
           style={{ flex: 1 }}
@@ -121,7 +207,7 @@ const Home = () => {
           <Animated.FlatList
             onScroll={Animated.event(
               [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-              { useNativeDriver: true }
+              { useNativeDriver: true, listener: handleScroll }
             )}
             data={randomisedKEGGY}
             keyExtractor={(item) => item.id.toString()}
@@ -131,53 +217,48 @@ const Home = () => {
             renderItem={({ item }) => {
               return (
                 <View style={styles.quoteContainer}>
-                  {item.type === "quote" && (
+                  {item.type === QuoteType.QUOTE && (
                     <Text style={styles.text}>{item.quote}</Text>
                   )}
-                  {item.type === "video" && (
-                    <YoutubePlayer
-                      height={240}
-                      width={380}
-                      play={false}
-                      videoId={item.quote}
-                    />
-                  )}
-                  {item.type === "image" && (
+                  {item.type === QuoteType.IMAGE && (
                     <Image
-                      source={item.quote}
-                      style={{ width: 380, height: "100%" }}
+                      source={item.quote as any}
+                      style={{ width: ImageSize.IMAGE_WIDTH, height: "100%" }}
                     />
                   )}
                   <View style={styles.shareButtons}>
                     {!hideIcons && (
                       <>
-                        {favourites.includes(item.id) ? (
+                        <View style={styles.heartContainer}>
                           <TouchableOpacity
-                            onPress={() => handleAddToFavourites(item.id)}
+                            onPress={() => handleHeartPress(item.id)}
                           >
                             <Ionicons
-                              name="ios-heart"
-                              size={30}
-                              color="#fb3958"
+                              name={
+                                userHearts[item.id]
+                                  ? IconName.HEART_FILLED
+                                  : IconName.HEART_OUTLINE
+                              }
+                              size={ImageSize.ICON_SIZE}
+                              color={
+                                userHearts[item.id]
+                                  ? Color.HEART_RED
+                                  : Color.WHITE
+                              }
                             />
                           </TouchableOpacity>
-                        ) : (
-                          <TouchableOpacity
-                            onPress={() => handleAddToFavourites(item.id)}
-                          >
-                            <Ionicons
-                              name="heart-outline"
-                              size={30}
-                              color="white"
-                            />
-                          </TouchableOpacity>
-                        )}
+                          {heartCounts[item.id] > 0 && (
+                            <Text style={styles.heartCount}>
+                              {heartCounts[item.id]}
+                            </Text>
+                          )}
+                        </View>
 
                         <TouchableOpacity onPress={() => handleShare()}>
                           <Ionicons
-                            name="ios-share-outline"
-                            size={30}
-                            color="white"
+                            name={IconName.SHARE_OUTLINE}
+                            size={ImageSize.ICON_SIZE}
+                            color={Color.WHITE}
                           />
                         </TouchableOpacity>
                       </>
@@ -206,14 +287,25 @@ const styles = StyleSheet.create({
   quoteContainer: {
     height: "100%",
     width,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: Layout.CENTER,
+    alignItems: Layout.CENTER,
   },
   shareButtons: {
     marginTop: 30,
     justifyContent: "space-between",
     width: 150,
-    flexDirection: "row",
+    flexDirection: Layout.ROW,
+  },
+  heartContainer: {
+    alignItems: Layout.CENTER,
+    justifyContent: Layout.CENTER,
+  },
+  heartCount: {
+    color: Color.WHITE,
+    fontSize: 12,
+    fontWeight: "bold",
+    marginTop: 2,
+    textAlign: Layout.CENTER,
   },
 });
 
