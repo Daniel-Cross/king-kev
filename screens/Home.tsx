@@ -236,11 +236,11 @@ const Home = () => {
                               }
                             />
                           </TouchableOpacity>
-                          {globalHeartCounts[item.id] > 0 && (
-                            <Text style={styles.heartCount}>
-                              {globalHeartCounts[item.id]}
-                            </Text>
-                          )}
+                          <Text style={styles.heartCount}>
+                            {globalHeartCounts[item.id] > 0
+                              ? globalHeartCounts[item.id]
+                              : ""}
+                          </Text>
                         </View>
 
                         <TouchableOpacity onPress={() => handleShare()}>
@@ -295,6 +295,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 2,
     textAlign: Layout.CENTER,
+    height: 16,
+    lineHeight: 16,
   },
 });
 

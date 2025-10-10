@@ -7,4 +7,10 @@ export const ROUTE = {
   HOME: "HOME",
   FAVOURITES: "FAVOURITES",
   GAME: "GAME",
+  GAME_SELECTION: "GameSelection",
+  WHO_INTRODUCTION: "WhoIntroduction",
+  WHO: "Who",
+  GUESS_CLUBS_SELECTION: "GuessClubsSelection",
+  GUESS_CLUBS: "GuessClubs",
+  SCORE: "Score",
 };

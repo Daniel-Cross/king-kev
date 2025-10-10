@@ -1,3 +1,5 @@
+import { GAME_COLORS } from "./colours";
+
 export const SHRIKHAND = "SHRIKHAND";
 export const PROX_MEDIUM = "PROX_MEDIUM";
 export const PROX_BOLD = "PROX_BOLD";
@@ -15,7 +17,7 @@ const FONT_SIZE_12 = 12;
 export const LOGO_FONT = {
   fontSize: FONT_SIZE_30,
   fontFamily: SHRIKHAND,
-  color: "#fff",
+  color: GAME_COLORS.text_white,
 };
 
 // export const HEADER_FONT_REGULAR = {
@@ -31,11 +33,11 @@ export const LOGO_FONT = {
 export const BODY_FONT_BOLD = {
   fontSize: FONT_SIZE_20,
   fontFamily: PROX_BOLD,
-  color: "#fff",
+  color: GAME_COLORS.text_white,
 };
 
 export const BODY_FONT = {
   fontSize: FONT_SIZE_20,
   fontFamily: PROX_MEDIUM,
-  color: "#fff",
+  color: GAME_COLORS.text_white,
 };

@@ -14,6 +14,7 @@ import { useEffect, useMemo, useState } from "react";
 import QuitModal from "../components/molecules/QuitModal";
 import { LOGO_FONT } from "../constants/typography";
 import { IS_IOS } from "../constants/constants";
+import { GAME_COLORS } from "../constants/colours";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Who = () => {
@@ -138,7 +139,10 @@ const Who = () => {
         gameEnded={gameEnded}
         currentIndex={currentIndex}
       />
-      <LinearGradient colors={["#FB5FA1", "#F4AA60"]} style={styles.container}>
+      <LinearGradient
+        colors={[GAME_COLORS.gradient_start, GAME_COLORS.gradient_end]}
+        style={styles.container}
+      >
         <SafeAreaView>
           <View style={styles.contentContainer}>
             {gameEnded ? (

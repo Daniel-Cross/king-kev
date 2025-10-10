@@ -11,23 +11,29 @@ import { BODY_FONT, LOGO_FONT } from "../constants/typography";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { ROUTE } from "../constants/constants";
+import { GAME_COLORS } from "../constants/colours";
 
 const WhoIntroduction = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   return (
-    <LinearGradient colors={["#FB5FA1", "#F4AA60"]} style={styles.container}>
+    <LinearGradient
+      colors={[GAME_COLORS.gradient_start, GAME_COLORS.gradient_end]}
+      style={styles.container}
+    >
       <SafeAreaView>
         <ScrollView
           contentContainerStyle={{ alignItems: "center" }}
           style={styles.introContainer}
         >
-          {/* <TouchableOpacity
+          <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={styles.backButton}
           >
             <Ionicons name="arrow-back-outline" size={30} color="white" />
-          </TouchableOpacity> */}
+          </TouchableOpacity>
           <Text style={styles.title}>Who Said It?</Text>
           <View style={styles.imageContainer}>
             <Image
@@ -55,7 +61,7 @@ const WhoIntroduction = () => {
           <Text style={styles.body}>Good luck!</Text>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate("Who")}
+            onPress={() => navigation.navigate(ROUTE.WHO)}
           >
             <Text style={styles.buttonText}>Start</Text>
           </TouchableOpacity>
@@ -95,7 +101,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#fff",
+    borderColor: GAME_COLORS.text_white,
     marginTop: 16,
   },
   buttonText: { ...LOGO_FONT },

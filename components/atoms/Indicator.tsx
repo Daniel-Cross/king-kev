@@ -1,4 +1,5 @@
 import { Animated, Dimensions, StyleSheet, View } from "react-native";
+import { GAME_COLORS } from "../../constants/colours";
 import { KEGGY } from "../../constants/quotes";
 import { width } from "../../constants/constants";
 
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
     height: 5,
     width: 5,
     borderRadius: 5,
-    backgroundColor: "#fff",
+    backgroundColor: GAME_COLORS.text_white,
     margin: 10,
   },
 });

@@ -1,9 +1,10 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { IS_IOS, ROUTE } from "../constants/constants";
+import { GAME_COLORS } from "../constants/colours";
 import { PRIMARY } from "../constants/colours";
 import Home from "../screens/Home";
-import WhoIntroduction from "../screens/WhoIntroduction";
+import GameSelection from "../screens/GameSelection";
 
 type TabParamList = {
   HOME: undefined;
@@ -20,7 +21,7 @@ const TabNavigation = () => {
         // tabBarHideOnKeyboard: IS_IOS() ? false : true,
         headerShown: false,
         gestureEnabled: false,
-        tabBarActiveTintColor: "#5F7AE0",
+        tabBarActiveTintColor: GAME_COLORS.tab_active,
         tabBarInactiveTintColor: PRIMARY.white,
         tabBarStyle: {
           height: IS_IOS() ? 80 : 60,
@@ -36,9 +37,6 @@ const TabNavigation = () => {
           if (route.name === ROUTE.HOME) {
             iconName = "home-outline";
           }
-          if (route.name === ROUTE.FAVOURITES) {
-            iconName = "heart-outline";
-          }
           if (route.name === ROUTE.GAME) {
             iconName = "game-controller-outline";
           }
@@ -53,7 +51,7 @@ const TabNavigation = () => {
       />
       <Tab.Screen
         name="GAME"
-        component={WhoIntroduction}
+        component={GameSelection}
         options={{ tabBarShowLabel: false }}
       />
     </Tab.Navigator>

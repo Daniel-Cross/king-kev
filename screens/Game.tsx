@@ -4,30 +4,27 @@ import { BODY_FONT, LOGO_FONT } from "../constants/typography";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ROUTE } from "../constants/constants";
+import { GAME_COLORS } from "../constants/colours";
 
 const Game = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   return (
-    <LinearGradient colors={["#FB5FA1", "#F4AA60"]} style={styles.container}>
+    <LinearGradient
+      colors={[GAME_COLORS.gradient_start, GAME_COLORS.gradient_end]}
+      style={styles.container}
+    >
       <SafeAreaView>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate("WhoIntroduction")}
+            onPress={() => navigation.navigate(ROUTE.GAME_SELECTION)}
           >
-            <Text style={styles.title}>Who Said It?</Text>
+            <Text style={styles.title}>Play Games</Text>
             <Text style={styles.body}>
-              Know a Keggy quote when you see one? Put your knowledge to the
-              test and become the envy of your friends and the most interesting
-              person in the room at parties
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.title}>Guess Who?</Text>
-            <Text style={styles.body}>
-              Receive some clues and guess who the player is before the time
-              runs out.
+              Choose from our collection of football games including "Who Said
+              It?" and "Guess the Clubs"
             </Text>
           </TouchableOpacity>
         </View>
@@ -58,7 +55,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#fff",
+    borderColor: GAME_COLORS.text_white,
   },
   body: { ...BODY_FONT, padding: 8, textAlign: "center" },
 });

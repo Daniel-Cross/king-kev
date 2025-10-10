@@ -17,3 +17,40 @@ export const PRIMARY = {
   pink: "#fc3158",
   background_white: "#ededed",
 };
+
+// Game-specific colors
+export const GAME_COLORS = {
+  // Difficulty colors
+  easy: "#4CAF50",
+  medium: "#FF9800",
+  hard: "#F44336",
+  very_hard: "#9C27B0",
+
+  // Game theme colors
+  who_said_it: "#4CAF50",
+  guess_clubs: "#2196F3",
+
+  // Gradient colors
+  gradient_start: "#FB5FA1",
+  gradient_end: "#F4AA60",
+  guess_clubs_gradient_start: "#2196F3",
+  guess_clubs_gradient_end: "#21CBF3",
+
+  // UI colors
+  success: "#4CAF50",
+  danger: "#F44336",
+  warning: "#FF9800",
+  info: "#2196F3",
+  primary_button: "#007BFF",
+  tab_active: "#5F7AE0",
+
+  // Text colors
+  text_white: "#fff",
+  text_black: "#000",
+};
+
+// App-wide colors
+export const COLORS = {
+  ...PRIMARY,
+  ...GAME_COLORS,
+};
