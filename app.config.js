@@ -20,7 +20,7 @@ export default {
       supportsTablet: false,
       bundleIdentifier: "com.daniel.cross.keggy",
       buildNumber: BUILD_NUMBER,
-      googleServicesFile: "./GoogleService-Info.plist",
+      googleServicesFile: "./config/ios/GoogleService-Info.plist",
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
       },
@@ -32,7 +32,7 @@ export default {
         backgroundColor: "#ffffff",
       },
       package: "com.daniel.cross.keggy",
-      googleServicesFile: "./google-services.json",
+      googleServicesFile: "./config/android/google-services.json",
     },
     web: {
       favicon: "./assets/favicon.png",

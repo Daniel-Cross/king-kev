@@ -32,11 +32,15 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   trackHeartPress,
-  getHeartCount,
-  hasUserHearted,
-  subscribeToHeartCounts,
-  initializeHeartCounts,
+  initializeFirebaseApp,
+  loadUserHeartsFromStorage,
 } from "../helpers/analyticsHelpers";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import {
+  setFavorites,
+  setGlobalHeartCounts,
+  setFavorite,
+} from "../store/favoritesSlice";
 
 const Home = () => {
   const [hideIcons, setHideIcons] = useState(false);
@@ -45,12 +49,15 @@ const Home = () => {
     new Set()
   );
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [heartCounts, setHeartCounts] = useState<{ [key: number]: number }>({});
-  const [userHearts, setUserHearts] = useState<{ [key: number]: boolean }>({});
+  const [processingHeartPress, setProcessingHeartPress] = useState(false);
+  const { userHearts, globalHeartCounts } = useAppSelector(
+    (state) => state.favorites
+  );
   const viewRef = useRef(null);
   const scrollX = useRef(new Animated.Value(0)).current;
   const focused = useIsFocused();
   const soundObject = useRef(new Audio.Sound()).current;
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     initializeApp();
@@ -70,33 +77,13 @@ const Home = () => {
 
   const initializeApp = async () => {
     try {
-      // Initialize heart counts in global storage (only runs once)
-      await initializeHeartCounts();
+      // Load user hearts from local storage first (fast, no network)
+      await loadUserHeartsFromStorage(dispatch, setFavorites);
 
-      // Load user's heart history locally
-      await loadUserHearts();
-
-      // Set up real-time listener for global heart counts
-      const unsubscribe = subscribeToHeartCounts((counts) => {
-        setHeartCounts(counts);
-      });
-
-      // Cleanup listener when component unmounts
-      return unsubscribe;
+      // Initialize Firebase in background (non-blocking)
+      await initializeFirebaseApp(dispatch, setGlobalHeartCounts);
     } catch (error) {
       console.error("Error initializing app:", error);
-    }
-  };
-
-  const loadUserHearts = async () => {
-    try {
-      const hearts: { [key: number]: boolean } = {};
-      for (const quote of KEGGY) {
-        hearts[quote.id] = await hasUserHearted(quote.id);
-      }
-      setUserHearts(hearts);
-    } catch (error) {
-      console.error("Error loading user hearts:", error);
     }
   };
 
@@ -122,6 +109,13 @@ const Home = () => {
   };
 
   const handleHeartPress = async (id: number) => {
+    // Prevent multiple rapid presses
+    if (processingHeartPress) {
+      return;
+    }
+
+    setProcessingHeartPress(true);
+
     const isCurrentlyHearted = userHearts[id] || false;
     const newHeartState = !isCurrentlyHearted;
 
@@ -129,16 +123,9 @@ const Home = () => {
       // Update heart count globally
       const newCount = await trackHeartPress(id, newHeartState);
 
-      // Update local state
-      setHeartCounts((prev) => ({
-        ...prev,
-        [id]: newCount,
-      }));
-
-      setUserHearts((prev) => ({
-        ...prev,
-        [id]: newHeartState,
-      }));
+      // Update Redux state for both user hearts and global counts
+      dispatch(setFavorite({ quoteId: id, isFavorite: newHeartState }));
+      dispatch(setGlobalHeartCounts({ ...globalHeartCounts, [id]: newCount }));
 
       // Play sound
       await soundObject.unloadAsync();
@@ -160,6 +147,8 @@ const Home = () => {
       }
     } catch (error) {
       console.error("Error handling heart press:", error);
+    } finally {
+      setProcessingHeartPress(false);
     }
   };
 
@@ -247,9 +236,9 @@ const Home = () => {
                               }
                             />
                           </TouchableOpacity>
-                          {heartCounts[item.id] > 0 && (
+                          {globalHeartCounts[item.id] > 0 && (
                             <Text style={styles.heartCount}>
-                              {heartCounts[item.id]}
+                              {globalHeartCounts[item.id]}
                             </Text>
                           )}
                         </View>

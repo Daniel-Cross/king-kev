@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "433849696401",
+    "project_id": "keggy-88998",
+    "storage_bucket": "keggy-88998.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:433849696401:android:77482604bb118e2d74ff30",
+        "android_client_info": {
+          "package_name": "com.daniel.cross.keggy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVr0FYhjX4_uOJrjvLgTFnGGmxaQilQsk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

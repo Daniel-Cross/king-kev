@@ -33,8 +33,8 @@ yarn-error.*
 .env
 
 # Firebase native config files (keep these in version control)
-GoogleService-Info.plist
-google-services.json
+config/GoogleService-Info.plist
+config/google-services.json
 
 # typescript
 *.tsbuildinfo

@@ -41,7 +41,5 @@ export const validateFirebaseConfig = () => {
       throw new Error(`Missing required Firebase config: ${key}`);
     }
   }
-
-  console.log("Firebase configuration validated successfully");
   return true;
 };

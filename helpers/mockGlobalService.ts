@@ -25,12 +25,6 @@ export const trackHeartPressGlobal = async (
       JSON.stringify(globalHeartCounts)
     );
 
-    console.log(
-      `Global heart ${
-        isAdding ? "added" : "removed"
-      } for quote ${quoteId}. New count: ${globalHeartCounts[quoteId]}`
-    );
-
     return globalHeartCounts[quoteId];
   } catch (error) {
     console.error("Error tracking global heart press:", error);

@@ -3,6 +3,8 @@ import Routes from "./navigation/Routes";
 import { useCallback, useEffect, useState } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "./hooks/fonts";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 import "./firebase.config"; // Initialize Firebase
 
 export default function App() {
@@ -38,10 +40,10 @@ export default function App() {
   if (isReady) {
     SplashScreen.hideAsync();
     return (
-      <>
+      <Provider store={store}>
         <StatusBar style="auto" animated={true} />
         <Routes />
-      </>
+      </Provider>
     );
   }
 }

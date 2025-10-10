@@ -1,42 +1,50 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import firestore from "@react-native-firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  serverTimestamp,
+  setDoc,
+} from "@react-native-firebase/firestore";
 
 // Analytics tracking for heart counts
 export const trackHeartPress = async (quoteId: number, isAdding: boolean) => {
+  const startTime = Date.now();
   try {
     // Update global heart count in Firestore
-    const quoteRef = firestore()
-      .collection("quoteHearts")
-      .doc(quoteId.toString());
+    const db = getFirestore();
+    const quoteRef = doc(db, "quoteHearts", quoteId.toString());
 
-    if (isAdding) {
-      await quoteRef.update({
-        count: firestore.FieldValue.increment(1),
-        lastUpdated: firestore.FieldValue.serverTimestamp(),
-      });
-    } else {
-      await quoteRef.update({
-        count: firestore.FieldValue.increment(-1),
-        lastUpdated: firestore.FieldValue.serverTimestamp(),
-      });
-    }
+    // First, get the current document to see if it exists
+    const currentDoc = await getDoc(quoteRef);
+    const currentCount = currentDoc.exists()
+      ? currentDoc.data()?.count || 0
+      : 0;
 
-    // Store user's heart history locally
-    const userHeartsKey = "userHeartHistory";
-    const userHeartsData = await AsyncStorage.getItem(userHeartsKey);
-    const userHearts = userHeartsData ? JSON.parse(userHeartsData) : {};
-    userHearts[quoteId] = isAdding;
-    await AsyncStorage.setItem(userHeartsKey, JSON.stringify(userHearts));
+    const newCount = isAdding
+      ? currentCount + 1
+      : Math.max(0, currentCount - 1);
 
-    // Get the updated count
-    const doc = await quoteRef.get();
-    const newCount = doc.exists ? doc.data()?.count || 0 : 0;
+    // Use setDoc with merge to create or update the document
+    await Promise.race([
+      setDoc(
+        quoteRef,
+        {
+          count: newCount,
+          lastUpdated: serverTimestamp(),
+          quoteId: quoteId,
+        },
+        { merge: true }
+      ),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Firestore write timeout")), 5000)
+      ),
+    ]);
 
-    console.log(
-      `Heart ${
-        isAdding ? "added" : "removed"
-      } for quote ${quoteId}. New count: ${newCount}`
-    );
+    const endTime = Date.now();
 
     return newCount;
   } catch (error) {
@@ -50,20 +58,13 @@ export const trackHeartPress = async (quoteId: number, isAdding: boolean) => {
 const trackHeartPressLocal = async (quoteId: number, isAdding: boolean) => {
   try {
     const heartCountsKey = "globalHeartCounts";
-    const userHeartsKey = "userHeartHistory";
-
     const heartCountsData = await AsyncStorage.getItem(heartCountsKey);
     const heartCounts = heartCountsData ? JSON.parse(heartCountsData) : {};
 
-    const userHeartsData = await AsyncStorage.getItem(userHeartsKey);
-    const userHearts = userHeartsData ? JSON.parse(userHeartsData) : {};
-
     const currentCount = heartCounts[quoteId] || 0;
-    heartCounts[quoteId] = currentCount + (isAdding ? 1 : -1);
-    userHearts[quoteId] = isAdding;
+    heartCounts[quoteId] = Math.max(0, currentCount + (isAdding ? 1 : -1));
 
     await AsyncStorage.setItem(heartCountsKey, JSON.stringify(heartCounts));
-    await AsyncStorage.setItem(userHeartsKey, JSON.stringify(userHearts));
 
     return heartCounts[quoteId];
   } catch (error) {
@@ -75,13 +76,12 @@ const trackHeartPressLocal = async (quoteId: number, isAdding: boolean) => {
 // Get heart count for a specific quote
 export const getHeartCount = async (quoteId: number): Promise<number> => {
   try {
-    const doc = await firestore()
-      .collection("quoteHearts")
-      .doc(quoteId.toString())
-      .get();
+    const db = getFirestore();
+    const docRef = doc(db, "quoteHearts", quoteId.toString());
+    const docSnap = await getDoc(docRef);
 
-    if (doc.exists) {
-      return doc.data()?.count || 0;
+    if (docSnap.exists()) {
+      return docSnap.data()?.count || 0;
     }
     return 0;
   } catch (error) {
@@ -103,12 +103,15 @@ export const getAllHeartCounts = async (): Promise<{
   [key: number]: number;
 }> => {
   try {
-    const snapshot = await firestore().collection("quoteHearts").get();
+    const db = getFirestore();
+    const snapshot = await getDocs(collection(db, "quoteHearts"));
+
     const heartCounts: { [key: number]: number } = {};
 
-    snapshot.forEach((doc) => {
-      const quoteId = parseInt(doc.id);
-      heartCounts[quoteId] = doc.data()?.count || 0;
+    snapshot.forEach((docSnap) => {
+      const quoteId = parseInt(docSnap.id);
+      const count = docSnap.data()?.count || 0;
+      heartCounts[quoteId] = count;
     });
 
     return heartCounts;
@@ -156,54 +159,62 @@ export const subscribeToHeartCounts = (
   onUpdate: (heartCounts: { [key: number]: number }) => void
 ) => {
   try {
-    return firestore()
-      .collection("quoteHearts")
-      .onSnapshot(
-        (snapshot) => {
-          const heartCounts: { [key: number]: number } = {};
-          snapshot.forEach((doc) => {
-            const quoteId = parseInt(doc.id);
-            heartCounts[quoteId] = doc.data()?.count || 0;
-          });
-          onUpdate(heartCounts);
-        },
-        (error) => {
-          console.error("Error listening to heart counts:", error);
-        }
-      );
+    const db = getFirestore();
+    return onSnapshot(
+      collection(db, "quoteHearts"),
+      (snapshot) => {
+        const heartCounts: { [key: number]: number } = {};
+        snapshot.forEach((docSnap) => {
+          const quoteId = parseInt(docSnap.id);
+          const count = docSnap.data()?.count || 0;
+          heartCounts[quoteId] = count;
+        });
+        onUpdate(heartCounts);
+      },
+      (error) => {
+        console.error("❌ Error listening to heart counts:", error);
+      }
+    );
   } catch (error) {
-    console.error("Error setting up heart count listener:", error);
+    console.error("❌ Error setting up heart count listener:", error);
     return null;
   }
 };
 
-// Initialize heart count documents in Firestore (run once)
-export const initializeHeartCounts = async () => {
+// Initialize Firebase and set up real-time listeners
+export const initializeFirebaseApp = async (
+  dispatch: any,
+  setGlobalHeartCounts: any
+) => {
   try {
-    const batch = firestore().batch();
-    const { KEGGY, OWEN } = await import("../constants/quotes");
+    // Load initial heart counts from Firebase
+    const counts = await getAllHeartCounts();
+    dispatch(setGlobalHeartCounts(counts));
 
-    // Initialize all quotes with 0 heart count
-    [...KEGGY, ...OWEN].forEach((quote) => {
-      const quoteRef = firestore()
-        .collection("quoteHearts")
-        .doc(quote.id.toString());
-
-      batch.set(
-        quoteRef,
-        {
-          count: 0,
-          lastUpdated: firestore.FieldValue.serverTimestamp(),
-          quoteId: quote.id,
-          type: quote.type,
-        },
-        { merge: true }
-      );
+    // Set up real-time listener for global heart counts
+    const unsubscribe = subscribeToHeartCounts((counts) => {
+      dispatch(setGlobalHeartCounts(counts));
     });
 
-    await batch.commit();
-    console.log("Heart counts initialized in Firestore");
+    return unsubscribe;
   } catch (error) {
-    console.error("Error initializing heart counts:", error);
+    console.error("❌ Firebase app initialization failed:", error);
+    return null;
+  }
+};
+
+// Load user hearts from Redux/AsyncStorage
+export const loadUserHeartsFromStorage = async (
+  dispatch: any,
+  setFavorites: any
+) => {
+  try {
+    const { loadFavoritesFromStorage } = await import(
+      "../store/favoritesSlice"
+    );
+    const favorites = await loadFavoritesFromStorage();
+    dispatch(setFavorites(favorites));
+  } catch (error) {
+    console.error("Error loading user hearts from Redux:", error);
   }
 };
