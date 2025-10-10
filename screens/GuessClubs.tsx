@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   FlatList,
+  useWindowDimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -33,6 +34,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 const GuessClubs = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const { height } = useWindowDimensions();
   const dispatch = useAppDispatch();
   const {
     currentIndex,
@@ -205,6 +207,7 @@ const GuessClubs = () => {
               {selectedClubs.length}/{currentFootballer.clubs.length} selected):
             </Text>
             <FlatList
+              style={{ height: height * 0.6 }}
               data={availableClubs}
               renderItem={({ item: clubName }) => {
                 const isSelected = selectedClubs.includes(clubName);
