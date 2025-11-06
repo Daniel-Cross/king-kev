@@ -41,6 +41,8 @@ const GameSelection = () => {
       navigation.navigate(ROUTE.WHO_INTRODUCTION);
     } else if (gameId === GameId.GUESS_CLUBS) {
       navigation.navigate(ROUTE.GUESS_CLUBS_SELECTION);
+    } else if (gameId === "add-player") {
+      navigation.navigate(ROUTE.ADD_PLAYER);
     }
   };
 

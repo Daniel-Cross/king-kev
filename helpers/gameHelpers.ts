@@ -1,5 +1,4 @@
-import { CLUBS } from "../constants/clubs";
-import { Country } from "../constants/enums";
+import { Club, Country } from "../constants/enums";
 
 // Helper function to map nationality to country
 export const getCountryFromNationality = (
@@ -24,8 +23,15 @@ export const getCountryFromNationality = (
   return nationalityMap[nationality] || null;
 };
 
-// Function to generate club options (correct + wrong answers)
-export const generateClubOptions = (currentFootballer: any): string[] => {
+/**
+ * Generates club options (correct + wrong answers) for the game
+ * @param currentFootballer - The current footballer being quizzed
+ * @param clubs - Array of all available clubs
+ */
+export const generateClubOptions = (
+  currentFootballer: any,
+  clubs: Club[]
+): string[] => {
   if (!currentFootballer || !currentFootballer.clubs) {
     return [];
   }
@@ -47,18 +53,22 @@ export const generateClubOptions = (currentFootballer: any): string[] => {
 
   // Add clubs from the same countries as player's clubs (excluding correct clubs)
   playerCountries.forEach((country) => {
-    const countryClubs = CLUBS.filter(
-      (club) => club.country === country && !correctClubNames.has(club.name)
-    ).map((club) => club.name);
+    const countryClubs = clubs
+      .filter(
+        (club) => club.country === country && !correctClubNames.has(club.name)
+      )
+      .map((club) => club.name);
     wrongClubs.push(...countryClubs);
   });
 
   // Add one club from player's nationality (if different from existing countries)
   if (nationalityCountry && !playerCountries.has(nationalityCountry)) {
-    const nationalityClubs = CLUBS.filter(
-      (club) =>
-        club.country === nationalityCountry && !correctClubNames.has(club.name)
-    ).map((club) => club.name);
+    const nationalityClubs = clubs
+      .filter(
+        (club) =>
+          club.country === nationalityCountry && !correctClubNames.has(club.name)
+      )
+      .map((club) => club.name);
     if (nationalityClubs.length > 0) {
       wrongClubs.push(nationalityClubs[0]); // Add just one club from nationality
     }

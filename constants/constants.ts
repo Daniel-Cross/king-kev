@@ -13,4 +13,5 @@ export const ROUTE = {
   GUESS_CLUBS_SELECTION: "GuessClubsSelection",
   GUESS_CLUBS: "GuessClubs",
   SCORE: "Score",
+  ADD_PLAYER: "AddPlayer",
 };

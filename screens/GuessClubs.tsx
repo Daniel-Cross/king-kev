@@ -30,7 +30,7 @@ import {
   arraysEqual,
   formatTime,
 } from "../helpers/gameHelpers";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { Ionicons } from "@expo/vector-icons";
 
 const GuessClubs = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -45,6 +45,7 @@ const GuessClubs = () => {
     questions,
     totalQuestions,
   } = useAppSelector((state) => state.game);
+  const { clubs } = useAppSelector((state) => state.data);
 
   const [showModal, setShowModal] = useState(false);
   const [selectedClubs, setSelectedClubs] = useState<string[]>([]);
@@ -55,11 +56,13 @@ const GuessClubs = () => {
 
   // Generate club options when current footballer changes
   useEffect(() => {
-    const options = generateClubOptions(currentFootballer);
-    setAvailableClubs(options);
-    setSelectedClubs([]); // Reset selected clubs for new question
-    setIsProcessingAnswer(false); // Reset processing state
-  }, [currentIndex, currentFootballer]);
+    if (clubs.length > 0 && currentFootballer) {
+      const options = generateClubOptions(currentFootballer, clubs);
+      setAvailableClubs(options);
+      setSelectedClubs([]); // Reset selected clubs for new question
+      setIsProcessingAnswer(false); // Reset processing state
+    }
+  }, [currentIndex, currentFootballer, clubs]);
 
   useEffect(() => {
     const backAction = () => {

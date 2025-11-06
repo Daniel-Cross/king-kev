@@ -5,6 +5,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "./hooks/fonts";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
+import { loadFootballData } from "./store/dataSlice";
 import "./firebase.config"; // Initialize Firebase
 
 export default function App() {
@@ -23,6 +24,10 @@ export default function App() {
       try {
         // Pre-load fonts, make any API calls you need to do here
         await useFonts();
+        // Load football data from Firebase (non-blocking)
+        store.dispatch(loadFootballData()).catch((error) => {
+          console.warn("Failed to load football data:", error);
+        });
       } catch (e) {
         console.warn(e);
       } finally {

@@ -12,19 +12,29 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Layout } from "../constants/enums";
 import { ROUTE } from "../constants/constants";
-import { useAppDispatch } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { startGame } from "../store/gameSlice";
 import {
   getFootballersByDifficulty,
   shuffleArray,
 } from "../helpers/footballDataHelpers";
 import { GameId, Difficulty } from "../constants/enums";
+import { useEffect } from "react";
+import { loadFootballData } from "../store/dataSlice";
 import { GAME_COLORS } from "../constants/colours";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 const GuessClubsSelection = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const dispatch = useAppDispatch();
+  const { footballers, isLoading } = useAppSelector((state) => state.data);
+
+  // Load data if not already loaded
+  useEffect(() => {
+    if (footballers.length === 0 && !isLoading) {
+      dispatch(loadFootballData());
+    }
+  }, [dispatch, footballers.length, isLoading]);
 
   const difficulties = [
     {
@@ -58,8 +68,17 @@ const GuessClubsSelection = () => {
   ];
 
   const handleDifficultyPress = (difficulty: Difficulty) => {
-    const footballers = getFootballersByDifficulty(difficulty);
-    const questions = shuffleArray(footballers).slice(0, 10);
+    if (footballers.length === 0) {
+      // Data not loaded yet, try loading and show error
+      dispatch(loadFootballData());
+      return;
+    }
+    const filteredFootballers = getFootballersByDifficulty(footballers, difficulty);
+    if (filteredFootballers.length === 0) {
+      // No footballers available for this difficulty
+      return;
+    }
+    const questions = shuffleArray(filteredFootballers).slice(0, 10);
 
     dispatch(
       startGame({

@@ -1,21 +1,38 @@
 import { Difficulty } from "../constants/enums";
-import { Footballer, FOOTBALLERS } from "../constants/footballers";
+import { Footballer } from "../constants/footballers";
 
-// Helper functions
+/**
+ * Gets footballers filtered by difficulty
+ * @param footballers - Array of footballers to filter
+ * @param difficulty - Difficulty level to filter by
+ */
 export const getFootballersByDifficulty = (
+  footballers: Footballer[],
   difficulty: Difficulty
 ): Footballer[] => {
-  return FOOTBALLERS.filter(
+  return footballers.filter(
     (footballer) => footballer.difficulty === difficulty
   );
 };
 
-export const getRandomFootballer = (difficulty: Difficulty): Footballer => {
-  const footballers = getFootballersByDifficulty(difficulty);
-  const randomIndex = Math.floor(Math.random() * footballers.length);
-  return footballers[randomIndex];
+/**
+ * Gets a random footballer from a filtered list
+ */
+export const getRandomFootballer = (
+  footballers: Footballer[],
+  difficulty: Difficulty
+): Footballer => {
+  const filtered = getFootballersByDifficulty(footballers, difficulty);
+  if (filtered.length === 0) {
+    throw new Error(`No footballers found for difficulty: ${difficulty}`);
+  }
+  const randomIndex = Math.floor(Math.random() * filtered.length);
+  return filtered[randomIndex];
 };
 
+/**
+ * Shuffles an array
+ */
 export const shuffleArray = <T>(array: T[]): T[] => {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -25,9 +42,11 @@ export const shuffleArray = <T>(array: T[]): T[] => {
   return shuffled;
 };
 
-// Validation function to ensure all players have at least 3 clubs
-export const validateFootballers = (): boolean => {
-  const invalidPlayers = FOOTBALLERS.filter(
+/**
+ * Validates that all players have at least 3 clubs
+ */
+export const validateFootballers = (footballers: Footballer[]): boolean => {
+  const invalidPlayers = footballers.filter(
     (player) => player.clubs.length < 3
   );
   if (invalidPlayers.length > 0) {
