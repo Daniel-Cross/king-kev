@@ -15,14 +15,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Country, Difficulty } from "../constants/enums";
+import { Country, Difficulty, Club, CLUBS } from "@keggy-data/data";
 import { submitFootballer } from "../helpers/submissionService";
 import { normalizeName } from "../helpers/nameHelpers";
 import { useAppSelector } from "../store/hooks";
 import CountryPicker from "../components/molecules/CountryPicker";
 import ClubAutocomplete from "../components/molecules/ClubAutocomplete";
-import { Club } from "../constants/enums";
-import { ALL_CLUBS } from "../constants/clubs/index";
 import { GAME_COLORS, PRIMARY } from "../constants/colours";
 import { LOGO_FONT, BODY_FONT } from "../constants/typography";
 import { Layout } from "../constants/enums";
@@ -32,7 +30,7 @@ const AddPlayer = () => {
   // Use local club constants instead of Firebase (which doesn't have club data yet)
   // Combine with any Firebase clubs if they exist in the future
   const { clubs: firebaseClubs } = useAppSelector((state) => state.data);
-  const clubs = [...ALL_CLUBS, ...firebaseClubs];
+  const clubs = [...CLUBS, ...firebaseClubs];
   const [footballerName, setFootballerName] = useState("");
   const [nationality, setNationality] = useState("");
   const [difficulty, setDifficulty] = useState<Difficulty>(Difficulty.EASY);

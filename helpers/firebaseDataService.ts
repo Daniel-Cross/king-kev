@@ -1,37 +1,17 @@
 import firestore from "@react-native-firebase/firestore";
-import { Club, Country } from "../constants/enums";
-import { Footballer } from "../constants/footballers";
+import {
+  Club,
+  Country,
+  Footballer,
+  FOOTBALLERS,
+  CLUBS,
+} from "@keggy-data/data";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const FOOTBALLERS_COLLECTION = "footballers";
 const CLUBS_COLLECTION = "clubs";
-const CACHE_KEY_FOOTBALLERS = "@footballers_cache";
 const CACHE_KEY_CLUBS = "@clubs_cache";
-const CACHE_TIMESTAMP_KEY_FOOTBALLERS = "@footballers_cache_timestamp";
 const CACHE_TIMESTAMP_KEY_CLUBS = "@clubs_cache_timestamp";
 const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-
-/**
- * Converts Firestore document to Footballer
- */
-const documentToFootballer = (doc: any): Footballer => {
-  const data = doc.data();
-  // Clubs are stored as array of {name, country} objects in Firebase
-  const clubs = (data.clubs || []).map((club: any) => ({
-    name: club.name,
-    country: club.country as Country,
-  }));
-  
-  return {
-    id: parseInt(doc.id) || doc.id,
-    name: data.name,
-    clubs: clubs,
-    difficulty: data.difficulty,
-    position: data.position,
-    nationality: data.nationality,
-    image: data.image,
-  };
-};
 
 /**
  * Converts Firestore document to Club
@@ -45,58 +25,21 @@ const documentToClub = (doc: any): Club => {
 };
 
 /**
- * Fetches all approved footballers from Firebase
+ * Fetches footballers from the package data
  */
 export const fetchFootballers = async (): Promise<Footballer[]> => {
-  try {
-    // Check cache first
-    const cached = await getCachedFootballers();
-    if (cached) {
-      // Return cached data and fetch fresh data in background
-      fetchFootballersFromFirebase().catch((error) =>
-        console.error("Background fetch error:", error)
-      );
-      return cached;
-    }
-
-    // Fetch from Firebase
-    return await fetchFootballersFromFirebase();
-  } catch (error) {
-    console.error("Error fetching footballers:", error);
-    // Fallback to cache if available
-    const cached = await getCachedFootballers();
-    if (cached) {
-      return cached;
-    }
-    throw error;
-  }
-};
-
-/**
- * Fetches footballers directly from Firebase
- */
-const fetchFootballersFromFirebase = async (): Promise<Footballer[]> => {
-  const snapshot = await firestore()
-    .collection(FOOTBALLERS_COLLECTION)
-    .where("status", "==", "approved")
-    .get();
-
-  const footballers = snapshot.docs.map(documentToFootballer);
-
-  // Cache the results
-  await cacheFootballers(footballers);
-
-  return footballers;
+  return FOOTBALLERS;
 };
 
 /**
  * Fetches all approved clubs from Firebase
+ * Falls back to package data if Firebase is empty or unavailable
  */
 export const fetchClubs = async (): Promise<Club[]> => {
   try {
     // Check cache first
     const cached = await getCachedClubs();
-    if (cached) {
+    if (cached && cached.length > 0) {
       // Return cached data and fetch fresh data in background
       fetchClubsFromFirebase().catch((error) =>
         console.error("Background fetch error:", error)
@@ -105,15 +48,25 @@ export const fetchClubs = async (): Promise<Club[]> => {
     }
 
     // Fetch from Firebase
-    return await fetchClubsFromFirebase();
+    const firebaseClubs = await fetchClubsFromFirebase();
+
+    // If Firebase returns empty, fallback to package data
+    if (firebaseClubs.length === 0) {
+      console.log("Firebase returned no clubs, using package data");
+      return CLUBS;
+    }
+
+    return firebaseClubs;
   } catch (error) {
     console.error("Error fetching clubs:", error);
     // Fallback to cache if available
     const cached = await getCachedClubs();
-    if (cached) {
+    if (cached && cached.length > 0) {
       return cached;
     }
-    throw error;
+    // Final fallback to package data
+    console.log("Using package data as fallback");
+    return CLUBS;
   }
 };
 
@@ -132,50 +85,6 @@ const fetchClubsFromFirebase = async (): Promise<Club[]> => {
   await cacheClubs(clubs);
 
   return clubs;
-};
-
-/**
- * Caches footballers to AsyncStorage
- */
-const cacheFootballers = async (footballers: Footballer[]): Promise<void> => {
-  try {
-    await AsyncStorage.setItem(
-      CACHE_KEY_FOOTBALLERS,
-      JSON.stringify(footballers)
-    );
-    await AsyncStorage.setItem(
-      CACHE_TIMESTAMP_KEY_FOOTBALLERS,
-      Date.now().toString()
-    );
-  } catch (error) {
-    console.error("Error caching footballers:", error);
-  }
-};
-
-/**
- * Gets cached footballers if still valid
- */
-const getCachedFootballers = async (): Promise<Footballer[] | null> => {
-  try {
-    const timestampStr = await AsyncStorage.getItem(
-      CACHE_TIMESTAMP_KEY_FOOTBALLERS
-    );
-    if (!timestampStr) return null;
-
-    const timestamp = parseInt(timestampStr);
-    const now = Date.now();
-    if (now - timestamp > CACHE_DURATION) {
-      return null; // Cache expired
-    }
-
-    const cached = await AsyncStorage.getItem(CACHE_KEY_FOOTBALLERS);
-    if (!cached) return null;
-
-    return JSON.parse(cached) as Footballer[];
-  } catch (error) {
-    console.error("Error reading cached footballers:", error);
-    return null;
-  }
 };
 
 /**
@@ -222,36 +131,11 @@ const getCachedClubs = async (): Promise<Club[] | null> => {
  */
 export const clearCache = async (): Promise<void> => {
   try {
-    await AsyncStorage.removeItem(CACHE_KEY_FOOTBALLERS);
     await AsyncStorage.removeItem(CACHE_KEY_CLUBS);
-    await AsyncStorage.removeItem(CACHE_TIMESTAMP_KEY_FOOTBALLERS);
     await AsyncStorage.removeItem(CACHE_TIMESTAMP_KEY_CLUBS);
   } catch (error) {
     console.error("Error clearing cache:", error);
   }
-};
-
-/**
- * Sets up real-time listeners for footballers (optional, for live updates)
- */
-export const subscribeToFootballers = (
-  callback: (footballers: Footballer[]) => void
-): (() => void) => {
-  const unsubscribe = firestore()
-    .collection(FOOTBALLERS_COLLECTION)
-    .where("status", "==", "approved")
-    .onSnapshot(
-      (snapshot) => {
-        const footballers = snapshot.docs.map(documentToFootballer);
-        cacheFootballers(footballers);
-        callback(footballers);
-      },
-      (error) => {
-        console.error("Error in footballers subscription:", error);
-      }
-    );
-
-  return unsubscribe;
 };
 
 /**
@@ -276,4 +160,3 @@ export const subscribeToClubs = (
 
   return unsubscribe;
 };
-

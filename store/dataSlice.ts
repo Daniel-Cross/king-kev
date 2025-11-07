@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { Footballer } from "../constants/footballers";
-import { Club } from "../constants/enums";
+import { Footballer, Club } from "@keggy-data/data";
 import {
   fetchFootballers,
   fetchClubs,

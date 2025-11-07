@@ -1,5 +1,4 @@
-import { Difficulty } from "../constants/enums";
-import { Footballer } from "../constants/footballers";
+import { Difficulty, Footballer } from "@keggy-data/data";
 
 /**
  * Gets footballers filtered by difficulty

@@ -6,8 +6,7 @@
  */
 
 import firestore from "@react-native-firebase/firestore";
-import { FOOTBALLERS } from "../constants/footballers";
-import { CLUBS } from "../constants/clubs";
+import { FOOTBALLERS, CLUBS } from "@keggy-data/data";
 
 const FOOTBALLERS_COLLECTION = "footballers";
 const CLUBS_COLLECTION = "clubs";

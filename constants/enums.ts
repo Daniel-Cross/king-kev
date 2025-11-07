@@ -1,3 +1,7 @@
+// Re-export data-related enums and types from @keggy-data/data package
+export { Difficulty, Country, Club } from "@keggy-data/data";
+
+// App-specific enums (keep these local)
 export enum QuoteType {
   QUOTE = "quote",
   IMAGE = "image",
@@ -30,52 +34,4 @@ export enum Layout {
 export enum GameId {
   WHO_SAID_IT = "who-said-it",
   GUESS_CLUBS = "guess-clubs",
-}
-
-export enum Difficulty {
-  EASY = "easy",
-  MEDIUM = "medium",
-  HARD = "hard",
-  VERY_HARD = "very-hard",
-}
-
-export enum Country {
-  ENGLAND = "England",
-  SPAIN = "Spain",
-  GERMANY = "Germany",
-  ITALY = "Italy",
-  FRANCE = "France",
-  NETHERLANDS = "Netherlands",
-  PORTUGAL = "Portugal",
-  BELGIUM = "Belgium",
-  TURKEY = "Turkey",
-  RUSSIA = "Russia",
-  UKRAINE = "Ukraine",
-  SCOTLAND = "Scotland",
-  GREECE = "Greece",
-  CROATIA = "Croatia",
-  SERBIA = "Serbia",
-  CZECH_REPUBLIC = "Czech Republic",
-  AUSTRIA = "Austria",
-  SWITZERLAND = "Switzerland",
-  NORWAY = "Norway",
-  SWEDEN = "Sweden",
-  DENMARK = "Denmark",
-  POLAND = "Poland",
-  ROMANIA = "Romania",
-  BULGARIA = "Bulgaria",
-  USA = "USA",
-  CANADA = "Canada",
-  MEXICO = "Mexico",
-  SAUDI_ARABIA = "Saudi Arabia",
-  CHINA = "China",
-  SOUTH_KOREA = "South Korea",
-  JAPAN = "Japan",
-  BRAZIL = "Brazil",
-  ARGENTINA = "Argentina",
-}
-
-export interface Club {
-  name: string;
-  country: Country;
 }

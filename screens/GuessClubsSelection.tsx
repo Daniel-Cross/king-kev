@@ -5,6 +5,8 @@ import {
   TouchableOpacity,
   View,
   FlatList,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { BODY_FONT, LOGO_FONT } from "../constants/typography";
 import { useNavigation } from "@react-navigation/native";
@@ -19,7 +21,7 @@ import {
   shuffleArray,
 } from "../helpers/footballDataHelpers";
 import { GameId, Difficulty } from "../constants/enums";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { loadFootballData } from "../store/dataSlice";
 import { GAME_COLORS } from "../constants/colours";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -27,12 +29,20 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 const GuessClubsSelection = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const dispatch = useAppDispatch();
-  const { footballers, isLoading } = useAppSelector((state) => state.data);
+  const { footballers, isLoading, error } = useAppSelector(
+    (state) => state.data
+  );
+  const hasTriedLoading = useRef(false);
 
-  // Load data if not already loaded
+  // Load data if not already loaded (only once)
   useEffect(() => {
-    if (footballers.length === 0 && !isLoading) {
+    if (footballers.length === 0 && !isLoading && !hasTriedLoading.current) {
+      hasTriedLoading.current = true;
       dispatch(loadFootballData());
+    }
+    // Reset the ref if we successfully loaded data
+    if (footballers.length > 0) {
+      hasTriedLoading.current = false;
     }
   }, [dispatch, footballers.length, isLoading]);
 
@@ -67,15 +77,56 @@ const GuessClubsSelection = () => {
     },
   ];
 
-  const handleDifficultyPress = (difficulty: Difficulty) => {
-    if (footballers.length === 0) {
-      // Data not loaded yet, try loading and show error
-      dispatch(loadFootballData());
+  const handleDifficultyPress = async (difficulty: Difficulty) => {
+    // If data is loading, wait for it
+    if (isLoading) {
+      Alert.alert("Loading", "Please wait while we load the game data...");
       return;
     }
-    const filteredFootballers = getFootballersByDifficulty(footballers, difficulty);
+
+    // If no data and not loading, try to load it
+    let currentFootballers = footballers;
+    if (currentFootballers.length === 0) {
+      if (error) {
+        Alert.alert(
+          "Error",
+          "Failed to load game data. Please check your connection and try again."
+        );
+        return;
+      }
+      // Try loading data
+      try {
+        const result = await dispatch(loadFootballData()).unwrap();
+        currentFootballers = result.footballers;
+      } catch (err) {
+        Alert.alert(
+          "Error",
+          "Failed to load game data. Please check your connection and try again."
+        );
+        return;
+      }
+    }
+
+    const filteredFootballers = getFootballersByDifficulty(
+      currentFootballers,
+      difficulty
+    );
+
+    // Debug logging
+    console.log(`Total footballers: ${currentFootballers.length}`);
+    console.log(`Filtering for difficulty: ${difficulty}`);
+    console.log(`Filtered footballers: ${filteredFootballers.length}`);
+    if (currentFootballers.length > 0) {
+      const difficulties = currentFootballers.map((f) => f.difficulty);
+      const uniqueDifficulties = [...new Set(difficulties)];
+      console.log(`Available difficulties in data:`, uniqueDifficulties);
+    }
+
     if (filteredFootballers.length === 0) {
-      // No footballers available for this difficulty
+      Alert.alert(
+        "No Players Available",
+        `There are no players available for ${difficulty} difficulty at the moment.`
+      );
       return;
     }
     const questions = shuffleArray(filteredFootballers).slice(0, 10);
@@ -132,13 +183,20 @@ const GuessClubsSelection = () => {
           </Text>
         </View>
 
-        <FlatList
-          data={difficulties}
-          renderItem={renderDifficultyItem}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.difficultiesContainer}
-          showsVerticalScrollIndicator={false}
-        />
+        {isLoading && footballers.length === 0 ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={GAME_COLORS.text_white} />
+            <Text style={styles.loadingText}>Loading game data...</Text>
+          </View>
+        ) : (
+          <FlatList
+            data={difficulties}
+            renderItem={renderDifficultyItem}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.difficultiesContainer}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>
@@ -249,6 +307,18 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: Layout.CENTER,
     opacity: 0.8,
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: Layout.CENTER,
+    justifyContent: Layout.CENTER,
+    paddingVertical: 40,
+  },
+  loadingText: {
+    ...BODY_FONT,
+    fontSize: 16,
+    marginTop: 16,
+    opacity: 0.9,
   },
 });
 

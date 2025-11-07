@@ -13,6 +13,7 @@
     "build-ios": "./build-and-run-ios.sh"
   },
   "dependencies": {
+    "@keggy-data/data": "github:Daniel-Cross/keggy-data",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-firebase/app": "^23.4.0",
     "@react-native-firebase/firestore": "^23.4.0",

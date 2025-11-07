@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Footballer } from "../constants/footballers";
-import { GameId, Difficulty } from "../constants/enums";
+import { Footballer, Difficulty } from "@keggy-data/data";
+import { GameId } from "../constants/enums";
 
 export interface GameState {
   currentGame: GameId | null;
