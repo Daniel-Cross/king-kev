@@ -17,7 +17,18 @@ const QuitModal = ({ showModal, setShowModal, onQuit }: QuitModalProps) => {
     if (onQuit) {
       onQuit();
     } else {
-      navigation.replace(ROUTE.HOME);
+      // Navigate back to Home tab (TabNavigation) with GAME tab selected
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: "Home",
+            params: {
+              screen: "GAME",
+            },
+          },
+        ],
+      });
     }
     setShowModal(false);
   };

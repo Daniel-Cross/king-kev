@@ -41,9 +41,12 @@ export const fetchClubs = async (): Promise<Club[]> => {
     const cached = await getCachedClubs();
     if (cached && cached.length > 0) {
       // Return cached data and fetch fresh data in background
-      fetchClubsFromFirebase().catch((error) =>
-        console.error("Background fetch error:", error)
-      );
+      fetchClubsFromFirebase().catch((error: any) => {
+        // Only log non-permission errors
+        if (error?.code !== "firestore/permission-denied") {
+          console.error("Background fetch error:", error);
+        }
+      });
       return cached;
     }
 
@@ -57,8 +60,11 @@ export const fetchClubs = async (): Promise<Club[]> => {
     }
 
     return firebaseClubs;
-  } catch (error) {
-    console.error("Error fetching clubs:", error);
+  } catch (error: any) {
+    // Only log non-permission errors (permission errors are expected if Firestore rules require auth)
+    if (error?.code !== "firestore/permission-denied") {
+      console.error("Error fetching clubs:", error);
+    }
     // Fallback to cache if available
     const cached = await getCachedClubs();
     if (cached && cached.length > 0) {
@@ -153,8 +159,11 @@ export const subscribeToClubs = (
         cacheClubs(clubs);
         callback(clubs);
       },
-      (error) => {
-        console.error("Error in clubs subscription:", error);
+      (error: any) => {
+        // Only log non-permission errors (permission errors are expected if Firestore rules require auth)
+        if (error?.code !== "firestore/permission-denied") {
+          console.error("Error in clubs subscription:", error);
+        }
       }
     );
 

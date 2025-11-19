@@ -256,7 +256,17 @@ const GuessClubs = () => {
           setShowModal={setShowModal}
           onQuit={() => {
             dispatch(quitGame());
-            navigation.replace(ROUTE.GAME_SELECTION);
+            navigation.reset({
+              index: 0,
+              routes: [
+                {
+                  name: "Home",
+                  params: {
+                    screen: "GAME",
+                  },
+                },
+              ],
+            });
           }}
         />
       </SafeAreaView>

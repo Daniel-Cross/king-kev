@@ -84,8 +84,11 @@ export const getHeartCount = async (quoteId: number): Promise<number> => {
       return docSnap.data()?.count || 0;
     }
     return 0;
-  } catch (error) {
-    console.error("Error getting heart count:", error);
+  } catch (error: any) {
+    // Only log non-permission errors (permission errors are expected if Firestore rules require auth)
+    if (error?.code !== "firestore/permission-denied") {
+      console.error("Error getting heart count:", error);
+    }
     // Fallback to local storage
     try {
       const heartCountsData = await AsyncStorage.getItem("globalHeartCounts");
@@ -115,8 +118,11 @@ export const getAllHeartCounts = async (): Promise<{
     });
 
     return heartCounts;
-  } catch (error) {
-    console.error("Error getting all heart counts:", error);
+  } catch (error: any) {
+    // Only log non-permission errors (permission errors are expected if Firestore rules require auth)
+    if (error?.code !== "firestore/permission-denied") {
+      console.error("Error getting all heart counts:", error);
+    }
     // Fallback to local storage
     try {
       const heartCountsData = await AsyncStorage.getItem("globalHeartCounts");
@@ -171,12 +177,18 @@ export const subscribeToHeartCounts = (
         });
         onUpdate(heartCounts);
       },
-      (error) => {
-        console.error("❌ Error listening to heart counts:", error);
+      (error: any) => {
+        // Only log non-permission errors (permission errors are expected if Firestore rules require auth)
+        if (error?.code !== "firestore/permission-denied") {
+          console.error("❌ Error listening to heart counts:", error);
+        }
       }
     );
-  } catch (error) {
-    console.error("❌ Error setting up heart count listener:", error);
+  } catch (error: any) {
+    // Only log non-permission errors
+    if (error?.code !== "firestore/permission-denied") {
+      console.error("❌ Error setting up heart count listener:", error);
+    }
     return null;
   }
 };
@@ -197,8 +209,11 @@ export const initializeFirebaseApp = async (
     });
 
     return unsubscribe;
-  } catch (error) {
-    console.error("❌ Firebase app initialization failed:", error);
+  } catch (error: any) {
+    // Only log non-permission errors (permission errors are expected if Firestore rules require auth)
+    if (error?.code !== "firestore/permission-denied") {
+      console.error("❌ Firebase app initialization failed:", error);
+    }
     return null;
   }
 };
